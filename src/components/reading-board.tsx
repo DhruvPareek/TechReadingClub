@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   CATEGORY_DESCRIPTORS,
   CATEGORY_ORDER,
@@ -8,12 +8,24 @@ import {
   type Reading,
 } from "@/types/readings";
 
+declare global {
+  interface Window {
+    twttr?: {
+      widgets?: {
+        load: () => void;
+      };
+    };
+  }
+}
+
 type ReadingBoardProps = {
   readings: ReadonlyArray<Reading>;
 };
 
 const STARS = [1, 2, 3, 4, 5] as const;
 type SortMode = "date" | "rating";
+const TWITTER_WIDGETS_SRC = "https://platform.twitter.com/widgets.js";
+let twitterWidgetsLoaded = false;
 
 export function ReadingBoard({ readings }: ReadingBoardProps) {
   const [activeCategory, setActiveCategory] = useState<Category>(
@@ -100,6 +112,13 @@ type ReadingCardProps = {
 };
 
 function ReadingCard({ reading }: ReadingCardProps) {
+  if (isTweetReading(reading)) {
+    return <TweetCard reading={reading} />;
+  }
+  return <StandardReadingCard reading={reading} />;
+}
+
+function StandardReadingCard({ reading }: ReadingCardProps) {
   return (
     <article className="group rounded-2xl border border-[#1f2b42] bg-[#0f192c] p-3 shadow-[0_18px_45px_rgba(1,4,12,0.35)] transition hover:bg-[#141f33] sm:p-4">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:gap-6">
@@ -112,9 +131,12 @@ function ReadingCard({ reading }: ReadingCardProps) {
           >
             {reading.title}
           </a>
-          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#f5ecda]">
-            {reading.author}
-          </p>
+          <div className="flex flex-wrap items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#f5ecda]">
+            <span>{reading.author}</span>
+            <span className="normal-case rounded-full border border-[#f5ecda]/40 px-2 py-[2px] text-[0.55rem] font-semibold tracking-[0.08em] text-[#f5ecda]">
+              {reading.type}
+            </span>
+          </div>
           {reading.summary && (
             <p className="text-[0.82rem] leading-relaxed text-[#b8a68b]">
               {reading.summary}
@@ -128,6 +150,35 @@ function ReadingCard({ reading }: ReadingCardProps) {
           </span>
         </div>
       </div>
+    </article>
+  );
+}
+
+function TweetCard({ reading }: ReadingCardProps) {
+  useTwitterWidgets();
+
+  return (
+    <article className="mx-auto w-full overflow-hidden rounded-2xl border border-[#1f2b42] bg-[#0f192c] p-0 shadow-[0_18px_45px_rgba(1,4,12,0.35)] self-center sm:max-w-[560px]">
+      {reading.tweetEmbedHtml ? (
+        <div
+          className="tweet-embed text-[#f5ecda]"
+          dangerouslySetInnerHTML={{ __html: reading.tweetEmbedHtml }}
+        />
+      ) : (
+        <div className="p-3 sm:p-4">
+          <p className="text-sm text-[#c6b798]">
+            Tweet preview unavailable.{" "}
+            <a
+              href={reading.link}
+              target="_blank"
+              rel="noreferrer"
+              className="underline underline-offset-2"
+            >
+              View it on X
+            </a>
+          </p>
+        </div>
+      )}
     </article>
   );
 }
@@ -164,5 +215,34 @@ function formatReviewDate(dateString: string) {
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const year = date.getFullYear();
   return `${month}/${year}`;
+}
+
+function isTweetReading(reading: Reading) {
+  return reading.categories.includes("Tweets") || reading.type === "Tweet";
+}
+
+function useTwitterWidgets() {
+  useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+
+    const loadWidgets = () => window.twttr?.widgets?.load();
+
+    if (twitterWidgetsLoaded) {
+      loadWidgets();
+      return undefined;
+    }
+
+    const script = document.createElement("script");
+    script.src = TWITTER_WIDGETS_SRC;
+    script.async = true;
+    script.charset = "utf-8";
+    script.addEventListener("load", loadWidgets);
+    document.body.appendChild(script);
+    twitterWidgetsLoaded = true;
+
+    return () => {
+      script.removeEventListener("load", loadWidgets);
+    };
+  }, []);
 }
 

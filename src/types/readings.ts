@@ -9,7 +9,7 @@ export const CATEGORY_ORDER = [
 
 export type Category = (typeof CATEGORY_ORDER)[number];
 
-export type ReadingType = "Article" | "Book" | "Tweet";
+export type ReadingType = "Book" | "Essay" | "Profile" | "Tweet";
 
 export type Reading = {
   id: string;
@@ -21,6 +21,7 @@ export type Reading = {
   summary?: string;
   reviewDate: string;
   categories: Category[];
+  tweetEmbedHtml?: string;
 };
 
 export type CategoryDescriptor = {
