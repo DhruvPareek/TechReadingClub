@@ -16,7 +16,6 @@ export type Reading = {
   title: string;
   author: string;
   type: ReadingType;
-  year: number;
   link: string;
   rating: 1 | 2 | 3 | 4 | 5;
   summary?: string;
