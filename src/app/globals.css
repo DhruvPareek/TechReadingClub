@@ -1,26 +1,42 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --navy-deep: #030710;
+  --navy: #0b1427;
+  --navy-soft: #111c33;
+  --cream: #f5ecda;
+  --gold: #cdbc9f;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-background: var(--navy);
+  --color-foreground: var(--cream);
+  --font-sans: var(--font-body);
+  --font-mono: "Space Mono", "IBM Plex Mono", monospace;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--navy-deep);
+  background-image: radial-gradient(circle at 20% 20%, #132036 0, transparent 50%),
+    radial-gradient(circle at 80% 0%, #0f1a2f 0, transparent 45%),
+    radial-gradient(circle at 30% 90%, #0b1427 0, transparent 35%);
+  color: var(--cream);
+  font-family: var(--font-body), "Space Grotesk", "Inter", system-ui, -apple-system,
+    BlinkMacSystemFont, sans-serif;
+  min-height: 100vh;
+}
+
+.font-display {
+  font-family: var(--font-display), "Playfair Display", "Times New Roman", serif;
+  letter-spacing: 0.02em;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: rgba(245, 236, 218, 0.5);
+}
+
+::selection {
+  background: var(--cream);
+  color: var(--navy-deep);
 }

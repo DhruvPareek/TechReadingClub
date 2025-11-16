@@ -1,0 +1,135 @@
+[
+  {
+    "id": "chip-war",
+    "title": "Chip War: The Fight for the World's Most Critical Technology",
+    "author": "Chris Miller",
+    "type": "Book",
+    "year": 2022,
+    "link": "https://www.simonandschuster.com/books/Chip-War/Chris-Miller/9781982172008",
+    "rating": 5,
+    "summary": "A sweeping narrative on how geopolitics, supply chains, and silicon became intertwined - and why the balance keeps shifting.",
+    "reviewDate": "2024-09-18",
+    "categories": ["Economics", "Companies", "People"]
+  },
+  {
+    "id": "tsmc-geography",
+    "title": "TSMC and the Geography of Innovation",
+    "author": "Noah Smith",
+    "type": "Article",
+    "year": 2024,
+    "link": "https://www.noahpinion.blog/p/tsmc-and-the-geography-of-innovation",
+    "rating": 4,
+    "summary": "Breaks down why fabs cluster in Taiwan, and what the pattern means for national industrial policy.",
+    "reviewDate": "2024-10-09",
+    "categories": ["Economics", "Companies"]
+  },
+  {
+    "id": "cost-disease-clouds",
+    "title": "The Cost Disease of Clouds",
+    "author": "Dylan Patel",
+    "type": "Article",
+    "year": 2023,
+    "link": "https://www.semianalysis.com/p/the-cost-disease-of-clouds",
+    "rating": 4,
+    "summary": "Dissects why infrastructure spend is ballooning even as hardware gets more capable, highlighting the new bottlenecks.",
+    "reviewDate": "2024-08-02",
+    "categories": ["Economics", "Technical"]
+  },
+  {
+    "id": "bits-about-money-cards",
+    "title": "The Card Industry, Explained",
+    "author": "Patrick McKenzie",
+    "type": "Article",
+    "year": 2022,
+    "link": "https://www.bitsaboutmoney.com/archive/the-card-industry-explained/",
+    "rating": 5,
+    "summary": "An approachable but detailed tour of how interchange, networks, and banks collaborate (and compete) to move trillions.",
+    "reviewDate": "2024-07-15",
+    "categories": ["Economics", "Companies"]
+  },
+  {
+    "id": "aws-nitro",
+    "title": "Inside the AWS Nitro System",
+    "author": "Jeff Barr",
+    "type": "Article",
+    "year": 2023,
+    "link": "https://aws.amazon.com/executive-insights/content/aws-nitro-system/",
+    "rating": 4,
+    "summary": "A concise breakdown of the hardware-software co-design that lets AWS carve up bare metal securely for millions of customers.",
+    "reviewDate": "2024-09-02",
+    "categories": ["Technical", "Companies"]
+  },
+  {
+    "id": "anthropic-constitution",
+    "title": "Building Constitutional AI",
+    "author": "Anthropic",
+    "type": "Article",
+    "year": 2023,
+    "link": "https://www.anthropic.com/news/constitutional-ai",
+    "rating": 4,
+    "summary": "Explains the human-in-the-loop process behind Claude's guardrails and why value alignment is now an engineering discipline.",
+    "reviewDate": "2024-10-12",
+    "categories": ["Technical", "People"]
+  },
+  {
+    "id": "generalist-openai",
+    "title": "OpenAI and the Frontier of Alignment",
+    "author": "Mario Gabriele",
+    "type": "Article",
+    "year": 2024,
+    "link": "https://www.generalist.com/briefing/openai",
+    "rating": 5,
+    "summary": "Profiles the organization's unusual structure, cap table, and cadence - and why it still ships faster than anyone else.",
+    "reviewDate": "2024-05-27",
+    "categories": ["Companies", "People"]
+  },
+  {
+    "id": "creative-selection",
+    "title": "Creative Selection",
+    "author": "Ken Kocienda",
+    "type": "Book",
+    "year": 2018,
+    "link": "https://www.hachettebookgroup.com/titles/ken-kocienda/creative-selection/9781250194473/",
+    "rating": 4,
+    "summary": "Behind-the-scenes stories on how Apple crafted the original iPhone software, focusing on individuals and taste.",
+    "reviewDate": "2023-12-03",
+    "categories": ["People", "Companies"]
+  },
+  {
+    "id": "figma-product-systems",
+    "title": "How Figma Ships Product Systems",
+    "author": "Linda Sun",
+    "type": "Article",
+    "year": 2024,
+    "link": "https://www.figma.com/blog/how-figma-ships-product-systems/",
+    "rating": 5,
+    "summary": "Walks through rituals that balance research, design engineering, and rollouts - useful for any product org.",
+    "reviewDate": "2024-06-05",
+    "categories": ["Technical", "Companies", "People"]
+  },
+  {
+    "id": "tweet-product-compounding",
+    "title": "Thread: Product Velocity Compounds",
+    "author": "Kevin Kwok",
+    "type": "Tweet",
+    "year": 2021,
+    "link": "https://x.com/kwokchain/status/1340751434580482048",
+    "rating": 4,
+    "summary": "A short thread on why teams that stack tiny product wins eventually drown slower competitors.",
+    "reviewDate": "2024-04-18",
+    "categories": ["Tweets", "Companies", "People"]
+  },
+  {
+    "id": "tweet-culture-metrics",
+    "title": "Tweet: Culture Is What You Measure",
+    "author": "Tracy Chou",
+    "type": "Tweet",
+    "year": 2023,
+    "link": "https://x.com/triketora/status/1652745074322368513",
+    "rating": 3,
+    "summary": "A reminder that inclusive engineering cultures only persist when leaders instrument them like any other system.",
+    "reviewDate": "2024-03-04",
+    "categories": ["Tweets", "People"]
+  }
+]
+
