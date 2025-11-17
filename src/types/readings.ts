@@ -29,6 +29,31 @@ export type CategoryDescriptor = {
   label: string;
 };
 
+export const CATEGORY_SLUGS: Record<Category, string> = {
+  Companies: "companies",
+  People: "people",
+  Technical: "technical",
+  Economics: "economics",
+  Tweets: "tweets",
+  "Misc.": "misc",
+};
+
+const SLUG_TO_CATEGORY = Object.entries(CATEGORY_SLUGS).reduce<
+  Record<string, Category>
+>((acc, [category, slug]) => {
+  acc[slug] = category as Category;
+  return acc;
+}, {});
+
+export function categoryToSlug(category: Category) {
+  return CATEGORY_SLUGS[category];
+}
+
+export function categoryFromSlug(slug: string | undefined | null) {
+  if (!slug) return null;
+  return SLUG_TO_CATEGORY[slug.toLowerCase()] ?? null;
+}
+
 export const CATEGORY_DESCRIPTORS: CategoryDescriptor[] = [
   {
     id: "Companies",

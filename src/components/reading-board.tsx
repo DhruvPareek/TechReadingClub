@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   CATEGORY_DESCRIPTORS,
-  CATEGORY_ORDER,
+  categoryToSlug,
   type Category,
   type Reading,
 } from "@/types/readings";
@@ -20,6 +21,7 @@ declare global {
 
 type ReadingBoardProps = {
   readings: ReadonlyArray<Reading>;
+  activeCategory: Category;
 };
 
 const STARS = [1, 2, 3, 4, 5] as const;
@@ -27,11 +29,14 @@ type SortMode = "date" | "rating";
 const TWITTER_WIDGETS_SRC = "https://platform.twitter.com/widgets.js";
 let twitterWidgetsLoaded = false;
 
-export function ReadingBoard({ readings }: ReadingBoardProps) {
-  const [activeCategory, setActiveCategory] = useState<Category>(
-    CATEGORY_ORDER[0],
-  );
+export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
+  const router = useRouter();
   const [sortMode, setSortMode] = useState<SortMode>("date");
+
+  const handleCategoryChange = (category: Category) => {
+    if (category === activeCategory) return;
+    router.push(`/${categoryToSlug(category)}`);
+  };
 
   const toggleSortMode = () =>
     setSortMode((prev) => (prev === "date" ? "rating" : "date"));
@@ -83,7 +88,7 @@ export function ReadingBoard({ readings }: ReadingBoardProps) {
             <button
               key={id}
               type="button"
-              onClick={() => setActiveCategory(id)}
+              onClick={() => handleCategoryChange(id)}
               className={`flex min-w-max flex-col rounded-2xl border px-4 py-3 text-left transition ${
                 isActive
                   ? "border-[#f5ecda] bg-[#050c1a] text-[#f5ecda]"
