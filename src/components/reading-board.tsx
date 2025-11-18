@@ -28,6 +28,7 @@ const STARS = [1, 2, 3, 4, 5] as const;
 type SortMode = "date" | "rating";
 const TWITTER_WIDGETS_SRC = "https://platform.twitter.com/widgets.js";
 let twitterWidgetsLoaded = false;
+const CATALOG_SECTION_ID = "catalog-section";
 
 export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
   const router = useRouter();
@@ -35,7 +36,11 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
 
   const handleCategoryChange = (category: Category) => {
     if (category === activeCategory) return;
-    router.push(`/${categoryToSlug(category)}`);
+    router.push(`/${categoryToSlug(category)}`, { scroll: false });
+    if (typeof window !== "undefined") {
+      const section = document.getElementById(CATALOG_SECTION_ID);
+      section?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   const toggleSortMode = () =>
@@ -65,7 +70,10 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
   }, [filteredReadings, sortMode]);
 
   return (
-    <section className="mx-auto w-full rounded-[40px] border border-[#1d2942] bg-[#0b1427]/90 p-6 text-[#f5ecda] shadow-[0_25px_80px_rgba(1,4,12,0.45)] sm:w-[80%] sm:p-10">
+    <section
+      id={CATALOG_SECTION_ID}
+      className="mx-auto w-full rounded-[40px] border border-[#1d2942] bg-[#0b1427]/90 p-6 text-[#f5ecda] shadow-[0_25px_80px_rgba(1,4,12,0.45)] sm:w-[80%] sm:p-10"
+    >
       <header className="mb-6 flex flex-col gap-3 sm:mb-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.4em] text-[#cfc0a3]">
