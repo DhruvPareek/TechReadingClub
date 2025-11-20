@@ -157,11 +157,11 @@ function ReadingCard({ reading }: ReadingCardProps) {
 function StandardReadingCard({ reading }: ReadingCardProps) {
   return (
     <article className="group rounded-2xl border border-[#1f2b42] bg-[#0f192c] p-3 shadow-[0_18px_45px_rgba(1,4,12,0.35)] transition hover:bg-[#141f33] sm:p-4">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:gap-6">
+      <div className="space-y-4">
         <div className="flex-1 space-y-1.5">
           <a
             href={reading.link}
-            className="font-display text-[0.95rem] font-semibold text-[#f5ecda] underline-offset-4 hover:underline sm:text-[1.15rem]"
+            className="reading-card-title font-display text-[1.05rem] font-semibold leading-tight text-[#fff5de] underline-offset-4 transition-all hover:underline sm:text-[1.25rem]"
             target="_blank"
             rel="noreferrer"
           >
@@ -179,11 +179,9 @@ function StandardReadingCard({ reading }: ReadingCardProps) {
             </p>
           )}
         </div>
-        <div className="flex flex-col items-end gap-1 text-[0.6rem] uppercase tracking-[0.24em] text-[#bda986]">
+        <div className="flex items-center justify-between border-t border-[#222e45] pt-3 text-[0.6rem] uppercase tracking-[0.24em] text-[#bda986]">
           <Rating rating={reading.rating} />
-          <span className="text-[#8f8164]">
-            {formatReviewDate(reading.reviewDate)}
-          </span>
+          <span className="text-[#9f8d6c]">{formatReviewDate(reading.reviewDate)}</span>
         </div>
       </div>
     </article>
@@ -225,9 +223,6 @@ function Rating({ rating }: { rating: number }) {
       {STARS.map((value) => (
         <StarIcon key={value} filled={value <= rating} />
       ))}
-      <span className="ml-1 text-[8px] tracking-[0.28em] text-[#7d6643]">
-        {rating}/5
-      </span>
     </div>
   );
 }
