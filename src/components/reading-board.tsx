@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   CATEGORY_DESCRIPTORS,
@@ -29,13 +29,18 @@ type SortMode = "date" | "rating";
 const TWITTER_WIDGETS_SRC = "https://platform.twitter.com/widgets.js";
 let twitterWidgetsLoaded = false;
 const CATALOG_SECTION_ID = "catalog-section";
+let lastCategoryScrollLeft = 0;
 
 export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
   const router = useRouter();
   const [sortMode, setSortMode] = useState<SortMode>("date");
+  const categoryNavRef = useRef<HTMLDivElement | null>(null);
 
   const handleCategoryChange = (category: Category) => {
     if (category === activeCategory) return;
+    if (categoryNavRef.current) {
+      lastCategoryScrollLeft = categoryNavRef.current.scrollLeft;
+    }
     router.push(`/${categoryToSlug(category)}`, { scroll: false });
     if (typeof window !== "undefined") {
       const section = document.getElementById(CATALOG_SECTION_ID);
@@ -69,6 +74,21 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
     );
   }, [filteredReadings, sortMode]);
 
+  useEffect(() => {
+    const node = categoryNavRef.current;
+    if (!node) return undefined;
+    node.scrollLeft = lastCategoryScrollLeft;
+
+    const handleScroll = () => {
+      lastCategoryScrollLeft = node.scrollLeft;
+    };
+
+    node.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      node.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <section
       id={CATALOG_SECTION_ID}
@@ -89,7 +109,10 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
         </button>
       </header>
 
-      <nav className="mb-8 flex w-full gap-3 overflow-x-auto pb-2">
+      <nav
+        ref={categoryNavRef}
+        className="category-scrollbar mb-8 flex w-full gap-3 overflow-x-auto pb-2"
+      >
         {CATEGORY_DESCRIPTORS.map(({ id, label }) => {
           const isActive = activeCategory === id;
           return (

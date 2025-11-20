@@ -40,3 +40,25 @@ a {
   background: var(--cream);
   color: var(--navy-deep);
 }
+
+.category-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+.category-scrollbar::-webkit-scrollbar {
+  height: 6px;
+}
+
+.category-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.category-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1));
+  border-radius: 999px;
+}
+
+.category-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.18));
+}
