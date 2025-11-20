@@ -1,4 +1,4 @@
-[
+const readings = [
   {
     "id": "hard-drive-bill-gates",
     "title": "Hard Drive: Bill Gates and the Making of the Microsoft Empire",
@@ -953,19 +953,19 @@
   "link": "https://x.com/DavidDeutschOxf/status/1917213808608559249?s=20",
   "rating": "",
   "summary": "",
-  "tweetEmbedHtml": "<blockquote class=\"twitter-tweet\"><p lang=\"en\" dir=\"ltr\">The West, or perhaps only the Anglosphere, is the historically unique idea that individuals exist not for the sake of their ruler, their class, their society, their ancestors, their gods, or any other such superstition, but for their own sake.</p>&mdash; David Deutsch (@DavidDeutschOxf) <a href=\"https://twitter.com/DavidDeutschOxf/status/1917213808608559249?ref_src=twsrc%5Etfw\">April 29, 2025</a></blockquote>",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="en" dir="ltr">The West, or perhaps only the Anglosphere, is the historically unique idea that individuals exist not for the sake of their ruler, their class, their society, their ancestors, their gods, or any other such superstition, but for their own sake.</p>&mdash; David Deutsch (@DavidDeutschOxf) <a href="https://twitter.com/DavidDeutschOxf/status/1917213808608559249?ref_src=twsrc%5Etfw">April 29, 2025</a></blockquote>`,
   "reviewDate": "",
   "categories": ["Tweets"]
 },
 {
-  "id": "naval-china-subsidize",
+  "id": "mark-holo-manufacturing-by-state",
   "title": "",
   "author": "",
   "type": "Tweet",
-  "link": "https://x.com/naval/status/1984270325316833441?s=20",
+  "link": "",
   "rating": "",
   "summary": "",
-  "tweetEmbedHtml": "<blockquote class=\"twitter-tweet\"><p lang=\"en\" dir=\"ltr\">China is a conglomerate willing to use its GDP and power to cross-subsidize any internal business that benefits from scale economies and network effects, until that business achieves a global supply monopoly.</p>&mdash; Naval (@naval) <a href=\"https://twitter.com/naval/status/1984270325316833441?ref_src=twsrc%5Etfw\">October 31, 2025</a></blockquote>",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="zxx" dir="ltr"><a href="https://t.co/5Gx9z4qjLr">pic.twitter.com/5Gx9z4qjLr</a></p>&mdash; mark holowesko (@holowesko) <a href="https://twitter.com/holowesko/status/1946595261821641191?ref_src=twsrc%5Etfw">July 19, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
   "reviewDate": "",
   "categories": ["Tweets"]
 },
@@ -977,7 +977,19 @@
   "link": "https://x.com/sahilypatel/status/1965808321451147541?s=20",
   "rating": "",
   "summary": "",
-  "tweetEmbedHtml": "<blockquote class=\"twitter-tweet\"><p lang=\"en\" dir=\"ltr\">my top 4 tech twitter tweets of all time <a href=\"https://t.co/FVwFJObBe6\">pic.twitter.com/FVwFJObBe6</a></p>&mdash; Sahil (@sahilypatel) <a href=\"https://twitter.com/sahilypatel/status/1965808321451147541?ref_src=twsrc%5Etfw\">September 10, 2025</a></blockquote>",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="en" dir="ltr">my top 4 tech twitter tweets of all time <a href="https://t.co/FVwFJObBe6">pic.twitter.com/FVwFJObBe6</a></p>&mdash; Sahil (@sahilypatel) <a href="https://twitter.com/sahilypatel/status/1965808321451147541?ref_src=twsrc%5Etfw">September 10, 2025</a></blockquote>`,
+  "reviewDate": "",
+  "categories": ["Tweets"]
+},
+{
+  "id": "naval-china-subsidize",
+  "title": "",
+  "author": "",
+  "type": "Tweet",
+  "link": "https://x.com/naval/status/1984270325316833441?s=20",
+  "rating": "",
+  "summary": "",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="en" dir="ltr">China is a conglomerate willing to use its GDP and power to cross-subsidize any internal business that benefits from scale economies and network effects, until that business achieves a global supply monopoly.</p>&mdash; Naval (@naval) <a href="https://twitter.com/naval/status/1984270325316833441?ref_src=twsrc%5Etfw">October 31, 2025</a></blockquote>`,
   "reviewDate": "",
   "categories": ["Tweets"]
 },
@@ -985,7 +997,7 @@
   "id": "hyperliquid-axsn-research",
   "title": "Hyperliquid: The Hyperoptimized Order Book L1",
   "author": "AXSN Research",
-  "type": "Book",
+  "type": "Essay",
   "link": "https://www.asxn.xyz/posts/hyperliquid/",
   "rating": "4",
   "summary": "These guys were early, had conviction, and extremely deep + technical.",
@@ -1000,8 +1012,34 @@
   "link": "https://x.com/elonmusk/status/1986833400171577503",
   "rating": "",
   "summary": "",
-  "tweetEmbedHtml": "<blockquote class=\"twitter-tweet\"><p lang=\"en\" dir=\"ltr\">You are a taker, not a maker. All you’ve done your whole life is take from the makers of the world. <br><br>The zero-sum mindset you have is at the root of so much evil. Once you realize that civilization is not zero-sum and that it is about making far more than one consumes, then it…</p>&mdash; Elon Musk (@elonmusk) <a href=\"https://twitter.com/elonmusk/status/1986833400171577503?ref_src=twsrc%5Etfw\">November 7, 2025</a></blockquote>",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="en" dir="ltr">You are a taker, not a maker. All you’ve done your whole life is take from the makers of the world. <br><br>The zero-sum mindset you have is at the root of so much evil. Once you realize that civilization is not zero-sum and that it is about making far more than one consumes, then it…</p>&mdash; Elon Musk (@elonmusk) <a href="https://twitter.com/elonmusk/status/1986833400171577503?ref_src=twsrc%5Etfw">November 7, 2025</a></blockquote>`,
   "reviewDate": "",
   "categories": ["Tweets"]
-}
-]
+},
+{
+  "id": "gavin-baker-some-thoughts-on-ai",
+  "title": "",
+  "author": "",
+  "type": "Tweet",
+  "link": "https://x.com/GavinSBaker/status/1991248768654803337?s=20",
+  "rating": "",
+  "summary": "",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="zxx" dir="ltr"><a href="https://t.co/boFKQfPb3G">https://t.co/boFKQfPb3G</a></p>&mdash; Gavin Baker (@GavinSBaker) <a href="https://twitter.com/GavinSBaker/status/1991248768654803337?ref_src=twsrc%5Etfw">November 19, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
+  "reviewDate": "",
+  "categories": ["Tweets"]
+},
+{
+  "id": "stables-axsn-research",
+  "title": "Stablecoins: Economic, Technological and Geopolitical Superconductor",
+  "author": "AXSN Research",
+  "type": "Essay",
+  "link": "https://newsletter.asxn.xyz/p/stablecoins",
+  "rating": "3",
+  "summary": "If you know very little about stablecoins, this is perfect for you. Otherwise, very few new ideas introduced here.",
+  "reviewDate": "2025-11-19",
+  "categories": ["Technical", "Economics"]
+},
+
+];
+
+export default readings;

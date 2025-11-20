@@ -1,4 +1,4 @@
-import readingsData from "@/data/readings.json";
+import readingsData from "@/data/readings";
 import { ReadingBoard } from "@/components/reading-board";
 import { categoryFromSlug, type Reading } from "@/types/readings";
 import { notFound } from "next/navigation";

@@ -58,6 +58,9 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
 
   const sortedReadings = useMemo(() => {
     const items = [...filteredReadings];
+    if (activeCategory === "Tweets") {
+      return items.reverse();
+    }
     if (sortMode === "rating") {
       return items.sort((a, b) => {
         if (b.rating === a.rating) {
@@ -72,7 +75,7 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
       (a, b) =>
         new Date(b.reviewDate).getTime() - new Date(a.reviewDate).getTime(),
     );
-  }, [filteredReadings, sortMode]);
+  }, [filteredReadings, sortMode, activeCategory]);
 
   useEffect(() => {
     const node = categoryNavRef.current;
@@ -94,8 +97,8 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
       id={CATALOG_SECTION_ID}
       className="mx-auto w-full rounded-[40px] border border-[#1d2942] bg-[#0b1427]/90 p-6 text-[#f5ecda] shadow-[0_25px_80px_rgba(1,4,12,0.45)] sm:w-[80%] sm:p-10"
     >
-      <header className="mb-6 flex flex-col gap-3 sm:mb-6 sm:flex-row sm:items-center sm:justify-between">
-        <div>
+      <header className="mb-6 flex flex-wrap items-center justify-center gap-3 text-center sm:mb-6 sm:justify-between sm:gap-4 sm:text-left">
+        <div className="flex-1 min-w-[180px] text-center sm:text-left">
           <p className="text-xs uppercase tracking-[0.4em] text-[#cfc0a3]">
             Catalog
           </p>
@@ -103,7 +106,7 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
         <button
           type="button"
           onClick={toggleSortMode}
-          className="self-end rounded-full border border-[#f5ecda] bg-transparent px-5 py-2 text-xs uppercase tracking-[0.3em] text-[#f5ecda] transition hover:bg-[#121b24] sm:self-auto"
+          className="w-full max-w-[280px] self-center rounded-full border border-[#f5ecda] bg-transparent px-5 py-2 text-xs uppercase tracking-[0.3em] text-[#f5ecda] transition hover:bg-[#121b24] sm:mx-0 sm:w-auto sm:self-auto"
         >
           Sort by: {sortMode === "date" ? "Date" : "Rating"}
         </button>
