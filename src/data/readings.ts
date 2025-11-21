@@ -946,6 +946,18 @@ const readings = [
 "categories": ["Economics"]
 },
 {
+  "id": "shaun-mag-s&p500-in-gold-vs-dollars",
+  "title": "",
+  "author": "",
+  "type": "Tweet",
+  "link": "",
+  "rating": "",
+  "summary": "",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="en" dir="ltr">The S&amp;P 500 since 1928:<br><br>1) denominated in gold<br><br>2) denominated in dollars<br><br>There&#39;s a magic trick where you can trivially make stocks go up by printing money, while simultaneously running towards a fiscal cliff <a href="https://t.co/FxoHB0nMzR">pic.twitter.com/FxoHB0nMzR</a></p>&mdash; Shaun Maguire (@shaunmmaguire) <a href="https://twitter.com/shaunmmaguire/status/1907903665572343892?ref_src=twsrc%5Etfw">April 3, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
+  "reviewDate": "",
+  "categories": ["Tweets"]
+},
+{
   "id": "deutsh-the-west",
   "title": "",
   "author": "",
@@ -954,6 +966,42 @@ const readings = [
   "rating": "",
   "summary": "",
   "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="en" dir="ltr">The West, or perhaps only the Anglosphere, is the historically unique idea that individuals exist not for the sake of their ruler, their class, their society, their ancestors, their gods, or any other such superstition, but for their own sake.</p>&mdash; David Deutsch (@DavidDeutschOxf) <a href="https://twitter.com/DavidDeutschOxf/status/1917213808608559249?ref_src=twsrc%5Etfw">April 29, 2025</a></blockquote>`,
+  "reviewDate": "",
+  "categories": ["Tweets"]
+},
+{
+  "id": "one-paragraph-what-has-gone-wrong-with-institutions",
+  "title": "",
+  "author": "",
+  "type": "Tweet",
+  "link": "",
+  "rating": "",
+  "summary": "",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="en" dir="ltr">This is the best one-paragraph explanation for what&#39;s gone wrong with our institutions: <a href="https://t.co/29bmZNZCAO">pic.twitter.com/29bmZNZCAO</a></p>&mdash; Alec Stapp (@AlecStapp) <a href="https://twitter.com/AlecStapp/status/1919193547783184789?ref_src=twsrc%5Etfw">May 5, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
+  "reviewDate": "",
+  "categories": ["Tweets"]
+},
+{
+  "id": "sf-1849",
+  "title": "",
+  "author": "",
+  "type": "Tweet",
+  "link": "",
+  "rating": "",
+  "summary": "",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="it" dir="ltr">San Francisco in 1849 <a href="https://t.co/x4bHlpkdVA">https://t.co/x4bHlpkdVA</a> <a href="https://t.co/hb2rrLH1gI">pic.twitter.com/hb2rrLH1gI</a></p>&mdash; Sheel Mohnot (@pitdesi) <a href="https://twitter.com/pitdesi/status/1933689791767343179?ref_src=twsrc%5Etfw">June 14, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
+  "reviewDate": "",
+  "categories": ["Tweets"]
+},
+{
+  "id": "thiel-AI-1pp-GDP-growth",
+  "title": "",
+  "author": "",
+  "type": "Tweet",
+  "link": "",
+  "rating": "",
+  "summary": "",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Peter Thiel says his rough place holder for the impact of AI is inline with the internet, maybe adding 1 percentage point to GDP growth every year for 10-15 years. <a href="https://t.co/FZjRd8Vcek">pic.twitter.com/FZjRd8Vcek</a></p>&mdash; modest proposal (@modestproposal1) <a href="https://twitter.com/modestproposal1/status/1938629270181650706?ref_src=twsrc%5Etfw">June 27, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
   "reviewDate": "",
   "categories": ["Tweets"]
 },
@@ -970,14 +1018,98 @@ const readings = [
   "categories": ["Tweets"]
 },
 {
+  "id": "happiness-vs-addiction-graphs",
+  "title": "",
+  "author": "",
+  "type": "Tweet",
+  "link": "",
+  "rating": "",
+  "summary": "",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="zxx" dir="ltr"><a href="https://t.co/C6Lj8PWM44">https://t.co/C6Lj8PWM44</a> <a href="https://t.co/jOpCLLbBsc">pic.twitter.com/jOpCLLbBsc</a></p>&mdash; Drex⚡️ (@drex_dsgn) <a href="https://twitter.com/drex_dsgn/status/1958474081524695487?ref_src=twsrc%5Etfw">August 21, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
+  "reviewDate": "",
+  "categories": ["Tweets"]
+},
+{
+  "id": "jamie-dimon-efficiency-acquired",
+  "title": "",
+  "author": "",
+  "type": "Tweet",
+  "link": "",
+  "rating": "",
+  "summary": "",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="en" dir="ltr">There was a subtle but important point in our Jamie Dimon interview about efficiency ratio.<br><br>This chart really illustrates it. Astonishing separation from competitors. <br><br>It&#39;s not hard to imagine why you can win in a market if you keep 15 cents more of every dollar you earn! <a href="https://t.co/Dvdpr65yIJ">pic.twitter.com/Dvdpr65yIJ</a></p>&mdash; Acquired Podcast (@AcquiredFM) <a href="https://twitter.com/AcquiredFM/status/1948043095695827350?ref_src=twsrc%5Etfw">July 23, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
+  "reviewDate": "",
+  "categories": ["Tweets"]
+},
+{
+  "id": "dario-LLM-economics",
+  "title": "",
+  "author": "",
+  "type": "Tweet",
+  "link": "",
+  "rating": "",
+  "summary": "",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Anthropic CEO talked about how he approaches LLM economics in an interview with John Collison <a href="https://t.co/2d6SF9mb7L">pic.twitter.com/2d6SF9mb7L</a></p>&mdash; Origo (@origoinvest) <a href="https://twitter.com/origoinvest/status/1960452442757456000?ref_src=twsrc%5Etfw">August 26, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
+  "reviewDate": "",
+  "categories": ["Tweets"]
+},
+{
+  "id": "perps-101",
+  "title": "",
+  "author": "",
+  "type": "Tweet",
+  "link": "",
+  "rating": "",
+  "summary": "",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="en" dir="ltr">perps 101<br><br>perps are 90%+ of crypto volume today, they run the market. critical to understand, but most people working in crypto don&#39;t actually understand how they work.<br><br>did a few sessions this week internally breaking them down. here&#39;s the tldr - not a guide, just my stream of…</p>&mdash; Tyler Tarsi (@ttarsi) <a href="https://twitter.com/ttarsi/status/1961194352799006761?ref_src=twsrc%5Etfw">August 28, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
+  "reviewDate": "",
+  "categories": ["Tweets"]
+},
+{
+  "id": "life-statisfaction-study",
+  "title": "",
+  "author": "",
+  "type": "Tweet",
+  "link": "",
+  "rating": "",
+  "summary": "",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Breakdown of the paper:<br><br>The study found that a person&#39;s life satisfaction is very, very strongly connected to their personality traits. When they removed all the usual problems from how things were measured, they could predict how happy someone was with their life almost… <a href="https://t.co/X1wC2xFExm">pic.twitter.com/X1wC2xFExm</a></p>&mdash; BensenHsu (@BensenHsu) <a href="https://twitter.com/BensenHsu/status/1963224466777055535?ref_src=twsrc%5Etfw">September 3, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
+  "reviewDate": "",
+  "categories": ["Tweets"]
+},
+{
   "id": "iconic-tech-tweets",
   "title": "",
   "author": "",
   "type": "Tweet",
-  "link": "https://x.com/sahilypatel/status/1965808321451147541?s=20",
+  "link": "",
   "rating": "",
   "summary": "",
   "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="en" dir="ltr">my top 4 tech twitter tweets of all time <a href="https://t.co/FVwFJObBe6">pic.twitter.com/FVwFJObBe6</a></p>&mdash; Sahil (@sahilypatel) <a href="https://twitter.com/sahilypatel/status/1965808321451147541?ref_src=twsrc%5Etfw">September 10, 2025</a></blockquote>`,
+  "reviewDate": "",
+  "categories": ["Tweets"]
+},
+{
+  "id": "larry-page-not-focused-on-ROI",
+  "title": "",
+  "author": "",
+  "type": "Tweet",
+  "link": "",
+  "rating": "",
+  "summary": "",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Just a reminder for everyone trying to call the top:<br><br>“Larry Page has said internally at Google many times, &quot;I’m willing to go bankrupt rather than lose this race.&quot; Everybody is focused on ROl, but the people making the decisions are not”<br><br>-<a href="https://twitter.com/GavinSBaker?ref_src=twsrc%5Etfw">@GavinSBaker</a> on ILTB <a href="https://t.co/XmhMCP04nQ">pic.twitter.com/XmhMCP04nQ</a></p>&mdash; BuccoCapital Bloke (@buccocapital) <a href="https://twitter.com/buccocapital/status/1970289015959257577?ref_src=twsrc%5Etfw">September 23, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
+  "reviewDate": "",
+  "categories": ["Tweets"]
+},
+{
+  "id": "goldman-sachs-reading",
+  "title": "",
+  "author": "",
+  "type": "Tweet",
+  "link": "",
+  "rating": "",
+  "summary": "",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Goldman Sachs Recommended reading list <br><br>I’ve seen some great books in this list <a href="https://t.co/2yDwYuknYH">pic.twitter.com/2yDwYuknYH</a></p>&mdash; Finding Compounders (@F_Compounders) <a href="https://twitter.com/F_Compounders/status/1972317739911090292?ref_src=twsrc%5Etfw">September 28, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
   "reviewDate": "",
   "categories": ["Tweets"]
 },
@@ -1017,11 +1149,35 @@ const readings = [
   "categories": ["Tweets"]
 },
 {
+  "id": "jim-simmons-daughter-zohran",
+  "title": "",
+  "author": "",
+  "type": "Tweet",
+  "link": "",
+  "rating": "",
+  "summary": "",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="en" dir="ltr">When a self-made genius capitalist, Jim Simons, leaves his wealth behind to his loving daughter, she turns socialist. Happens so often.<br><br>The irony of a math genius&#39;s daughter fighting against teaching advanced math in schools. Jimmy should be laughing in his grave.…</p>&mdash; Prasanna S (@myprasanna) <a href="https://twitter.com/myprasanna/status/1989573224104120365?ref_src=twsrc%5Etfw">November 15, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
+  "reviewDate": "",
+  "categories": ["Tweets"]
+},
+{
+  "id": "the-story-of-technology-prasanna",
+  "title": "",
+  "author": "",
+  "type": "Tweet",
+  "link": "",
+  "rating": "",
+  "summary": "",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="en" dir="ltr">The story of technology is the story of humanity. Without it, we’re just clever apes.<br><br>We’ve already beaten most of the natural ways to die. Hunger, cold, infection — all dramatically reduced. The biggest problem for almost everyone on Earth today is not survival. If you fail,…</p>&mdash; Prasanna S (@myprasanna) <a href="https://twitter.com/myprasanna/status/1989556527498469789?ref_src=twsrc%5Etfw">November 15, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
+  "reviewDate": "",
+  "categories": ["Tweets"]
+},
+{
   "id": "gavin-baker-some-thoughts-on-ai",
   "title": "",
   "author": "",
   "type": "Tweet",
-  "link": "https://x.com/GavinSBaker/status/1991248768654803337?s=20",
+  "link": "",
   "rating": "",
   "summary": "",
   "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="zxx" dir="ltr"><a href="https://t.co/boFKQfPb3G">https://t.co/boFKQfPb3G</a></p>&mdash; Gavin Baker (@GavinSBaker) <a href="https://twitter.com/GavinSBaker/status/1991248768654803337?ref_src=twsrc%5Etfw">November 19, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
@@ -1039,7 +1195,30 @@ const readings = [
   "reviewDate": "2025-11-19",
   "categories": ["Technical", "Economics"]
 },
-
+{
+  "id": "tkal-delivery-app-tipping",
+  "title": "",
+  "author": "",
+  "type": "Tweet",
+  "link": "",
+  "rating": "",
+  "summary": "",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Delivery app tipping isn’t about feedback mechanisms.. it’s a tool for maximizing price paid by consumers… eaters are economically irrational with tip, for every $1 in tip, they economically behave as if it were $0.80 (directionally true but hypothetical figure) … this means…</p>&mdash; travis kalanick (@travisk) <a href="https://twitter.com/travisk/status/1991282453852692969?ref_src=twsrc%5Etfw">November 19, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
+  "reviewDate": "",
+  "categories": ["Tweets"]
+},
+{
+  "id": "tom-howard-quantum-bitcoin-zec",
+  "title": "",
+  "author": "",
+  "type": "Tweet",
+  "link": "",
+  "rating": "",
+  "summary": "",
+  "tweetEmbedHtml": `<blockquote class="twitter-tweet"><p lang="en" dir="ltr">This is a popular misconception of the Quantum risk.<br><br>Let me try to simplify the risk here (and <a href="https://twitter.com/nic__carter?ref_src=twsrc%5Etfw">@nic__carter</a> <a href="https://twitter.com/YuviLightman?ref_src=twsrc%5Etfw">@YuviLightman</a> <a href="https://twitter.com/ebfull?ref_src=twsrc%5Etfw">@ebfull</a> feel free to correct any errors):<br><br>- Quantum does not break all encryption. Shor’s algorithm breaks schemes based on discrete log or factoring,… <a href="https://t.co/Vj9OlnGosg">https://t.co/Vj9OlnGosg</a></p>&mdash; Tom Howard (@_TomHoward) <a href="https://twitter.com/_TomHoward/status/1991544753821790401?ref_src=twsrc%5Etfw">November 20, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`,
+  "reviewDate": "",
+  "categories": ["Tweets"]
+}
 ];
 
 export default readings;
