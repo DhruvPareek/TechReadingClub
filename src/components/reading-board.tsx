@@ -29,17 +29,20 @@ type SortMode = "date" | "rating";
 const TWITTER_WIDGETS_SRC = "https://platform.twitter.com/widgets.js";
 let twitterWidgetsLoaded = false;
 const CATALOG_SECTION_ID = "catalog-section";
-let lastCategoryScrollLeft = 0;
+const CATEGORY_SCROLL_STORAGE_KEY = "reading-board-category-scroll-left";
 
 export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
   const router = useRouter();
   const [sortMode, setSortMode] = useState<SortMode>("date");
   const categoryNavRef = useRef<HTMLDivElement | null>(null);
+  const lastScrollLeftRef = useRef(0);
 
   const handleCategoryChange = (category: Category) => {
     if (category === activeCategory) return;
     if (categoryNavRef.current) {
-      lastCategoryScrollLeft = categoryNavRef.current.scrollLeft;
+      const scrollLeft = categoryNavRef.current.scrollLeft;
+      lastScrollLeftRef.current = scrollLeft;
+      persistCategoryScrollLeft(scrollLeft);
     }
     router.push(`/${categoryToSlug(category)}`, { scroll: false });
     if (typeof window !== "undefined") {
@@ -80,10 +83,13 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
   useEffect(() => {
     const node = categoryNavRef.current;
     if (!node) return undefined;
-    node.scrollLeft = lastCategoryScrollLeft;
+    const storedScrollLeft = readStoredCategoryScrollLeft();
+    lastScrollLeftRef.current = storedScrollLeft;
+    node.scrollLeft = storedScrollLeft;
 
     const handleScroll = () => {
-      lastCategoryScrollLeft = node.scrollLeft;
+      lastScrollLeftRef.current = node.scrollLeft;
+      persistCategoryScrollLeft(node.scrollLeft);
     };
 
     node.addEventListener("scroll", handleScroll, { passive: true });
@@ -195,14 +201,14 @@ function TweetCard({ reading }: ReadingCardProps) {
   useTwitterWidgets();
 
   return (
-    <article className="mx-auto w-full overflow-hidden rounded-2xl border border-[#1f2b42] bg-[#0f192c] p-0 shadow-[0_18px_45px_rgba(1,4,12,0.35)] self-center sm:max-w-[560px]">
+    <article className="mx-auto w-full self-center sm:max-w-[600px]">
       {reading.tweetEmbedHtml ? (
         <div
-          className="tweet-embed text-[#f5ecda]"
+          className="tweet-embed"
           dangerouslySetInnerHTML={{ __html: reading.tweetEmbedHtml }}
         />
       ) : (
-        <div className="p-3 sm:p-4">
+        <div className="rounded-xl border border-[#1f2b42] bg-[#0f192c] p-3 shadow-[0_18px_45px_rgba(1,4,12,0.35)] sm:p-4">
           <p className="text-sm text-[#c6b798]">
             Tweet preview unavailable.{" "}
             <a
@@ -278,5 +284,20 @@ function useTwitterWidgets() {
       script.removeEventListener("load", loadWidgets);
     };
   }, []);
+}
+
+function readStoredCategoryScrollLeft() {
+  if (typeof window === "undefined") return 0;
+  const rawValue = window.sessionStorage.getItem(CATEGORY_SCROLL_STORAGE_KEY);
+  const parsed = rawValue ? Number(rawValue) : 0;
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function persistCategoryScrollLeft(value: number) {
+  if (typeof window === "undefined") return;
+  window.sessionStorage.setItem(
+    CATEGORY_SCROLL_STORAGE_KEY,
+    String(Math.max(0, value)),
+  );
 }
 

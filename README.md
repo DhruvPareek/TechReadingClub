@@ -2,6 +2,23 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### Configuration
+
+This project loads all reading data from a Google Sheet via the Sheets API.
+Create a `.env.local` file with the following keys before running the dev server:
+
+```
+GOOGLE_SHEETS_API_KEY=your_api_key
+GOOGLE_SHEETS_SPREADSHEET_ID=your_spreadsheet_id
+# Must include the header row and all columns (`id` through `tweetEmbedHtml`)
+GOOGLE_SHEETS_RANGE=Sheet1!A1:J
+```
+
+If you imported the provided CSV into a blank spreadsheet the default sheet name is
+usually `Sheet1`, otherwise update `GOOGLE_SHEETS_RANGE` to match your tab name.
+
+### Development server
+
 First, run the development server:
 
 ```bash

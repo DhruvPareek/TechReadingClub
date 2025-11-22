@@ -1,9 +1,7 @@
-import readingsData from "@/data/readings";
 import { ReadingBoard } from "@/components/reading-board";
-import { categoryFromSlug, type Reading } from "@/types/readings";
+import { fetchReadingsFromSheet } from "@/lib/google-sheets";
+import { categoryFromSlug } from "@/types/readings";
 import { notFound } from "next/navigation";
-
-const readings = readingsData as ReadonlyArray<Reading>;
 
 type CategoryPageProps = {
   params: Promise<{
@@ -19,6 +17,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   if (!category) {
     notFound();
   }
+
+  const readings = await fetchReadingsFromSheet();
 
   return (
     <div className="min-h-screen bg-[#040812] text-[#f5ecda]">

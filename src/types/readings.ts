@@ -17,7 +17,7 @@ export type Reading = {
   author: string;
   type: ReadingType;
   link: string;
-  rating: 1 | 2 | 3 | 4 | 5;
+  rating: 0 | 1 | 2 | 3 | 4 | 5;
   summary?: string;
   reviewDate: string;
   categories: Category[];
@@ -47,6 +47,10 @@ const SLUG_TO_CATEGORY = Object.entries(CATEGORY_SLUGS).reduce<
 
 export function categoryToSlug(category: Category) {
   return CATEGORY_SLUGS[category];
+}
+
+export function isCategory(value: string): value is Category {
+  return CATEGORY_ORDER.includes(value as Category);
 }
 
 export function categoryFromSlug(slug: string | undefined | null) {
