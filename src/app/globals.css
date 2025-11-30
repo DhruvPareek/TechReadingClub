@@ -6,8 +6,6 @@
   --navy-soft: #111c33;
   --cream: #f5ecda;
   --gold: #cdbc9f;
-  --tweet-embed-scale: 0.88;
-  --tweet-embed-max-width: 620px;
 }
 
 @theme inline {
@@ -77,34 +75,3 @@ a {
   color: #fffef3;
 }
 
-.tweet-embed {
-  display: flex;
-  justify-content: center;
-  padding: 0.25rem 0 0.5rem;
-  max-width: var(--tweet-embed-max-width);
-  width: 100%;
-  margin: 0 auto;
-}
-
-.tweet-embed iframe,
-.tweet-embed blockquote.twitter-tweet {
-  width: 100% !important;
-}
-
-@supports (zoom: 1) {
-  .tweet-embed iframe,
-  .tweet-embed blockquote.twitter-tweet {
-    width: calc(100% / var(--tweet-embed-scale)) !important;
-    zoom: var(--tweet-embed-scale);
-  }
-}
-
-@supports not (zoom: 1) {
-  .tweet-embed iframe,
-  .tweet-embed blockquote.twitter-tweet {
-    width: calc(100% / var(--tweet-embed-scale)) !important;
-    transform: scale(var(--tweet-embed-scale));
-    transform-origin: top center;
-    margin-bottom: calc((var(--tweet-embed-scale) - 1) * var(--tweet-embed-max-width));
-  }
-}

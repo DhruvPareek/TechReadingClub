@@ -201,14 +201,14 @@ function TweetCard({ reading }: ReadingCardProps) {
   useTwitterWidgets();
 
   return (
-    <article className="mx-auto w-full self-center sm:max-w-[600px]">
+    <article className="mx-auto w-full overflow-hidden rounded-2xl border border-[#1f2b42] bg-[#0f192c] p-0 shadow-[0_18px_45px_rgba(1,4,12,0.35)] self-center sm:max-w-[560px]">
       {reading.tweetEmbedHtml ? (
         <div
-          className="tweet-embed"
+          className="tweet-embed text-[#f5ecda]"
           dangerouslySetInnerHTML={{ __html: reading.tweetEmbedHtml }}
         />
       ) : (
-        <div className="rounded-xl border border-[#1f2b42] bg-[#0f192c] p-3 shadow-[0_18px_45px_rgba(1,4,12,0.35)] sm:p-4">
+        <div className="p-3 sm:p-4">
           <p className="text-sm text-[#c6b798]">
             Tweet preview unavailable.{" "}
             <a

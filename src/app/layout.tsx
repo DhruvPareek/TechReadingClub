@@ -16,12 +16,8 @@ const body = Space_Grotesk({
 
 export const metadata: Metadata = {
   title: "The Technology Reading Club",
-  description:
-    "A bold catalog of the books, articles, and tweets currently on my mind.",
   openGraph: {
     title: "The Technology Reading Club",
-    description:
-      "Economics, companies, code, people, and the tweets worth forwarding.",
     url: "https://technology-reading-club.local",
     type: "website",
   },
