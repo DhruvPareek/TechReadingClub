@@ -51,9 +51,6 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
     }
   };
 
-  const toggleSortMode = () =>
-    setSortMode((prev) => (prev === "date" ? "rating" : "date"));
-
   const filteredReadings = useMemo(
     () => readings.filter((reading) => reading.categories.includes(activeCategory)),
     [readings, activeCategory],
@@ -109,13 +106,34 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
             Catalog
           </p>
         </div>
-        <button
-          type="button"
-          onClick={toggleSortMode}
-          className="w-full max-w-[280px] self-center rounded-full border border-[#f5ecda] bg-transparent px-5 py-2 text-xs uppercase tracking-[0.3em] text-[#f5ecda] transition hover:bg-[#121b24] sm:mx-0 sm:w-auto sm:self-auto"
-        >
-          Sort by: {sortMode === "date" ? "Date" : "Rating"}
-        </button>
+        <div className="flex items-center justify-center gap-2 text-xs uppercase tracking-[0.3em] text-[#f5ecda] sm:justify-end">
+          <span className="text-[#cfc0a3]">SORT BY:</span>
+          <button
+            type="button"
+            onClick={() => setSortMode("date")}
+            className={`transition ${
+              sortMode === "date"
+                ? "font-bold underline underline-offset-4"
+                : "text-[#c6b798] hover:text-[#f5ecda]"
+            }`}
+            aria-pressed={sortMode === "date"}
+          >
+            DATE
+          </button>
+          <span className="text-[#cfc0a3]">/</span>
+          <button
+            type="button"
+            onClick={() => setSortMode("rating")}
+            className={`transition ${
+              sortMode === "rating"
+                ? "font-bold underline underline-offset-4"
+                : "text-[#c6b798] hover:text-[#f5ecda]"
+            }`}
+            aria-pressed={sortMode === "rating"}
+          >
+            RATING
+          </button>
+        </div>
       </header>
 
       <nav
@@ -143,7 +161,13 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
         })}
       </nav>
 
-      <div className="grid gap-3 sm:gap-4">
+      <div
+        className={
+          activeCategory === "Tweets"
+            ? "mt-2 grid gap-1 sm:gap-1"
+            : "mt-2 divide-y divide-[#1d2942] border-y border-[#1d2942]"
+        }
+      >
         {sortedReadings.map((reading) => (
           <ReadingCard key={reading.id} reading={reading} />
         ))}
@@ -165,7 +189,7 @@ function ReadingCard({ reading }: ReadingCardProps) {
 
 function StandardReadingCard({ reading }: ReadingCardProps) {
   return (
-    <article className="group rounded-2xl border border-[#1f2b42] bg-[#0f192c] p-3 shadow-[0_18px_45px_rgba(1,4,12,0.35)] transition hover:bg-[#141f33] sm:p-4">
+    <article className="group px-2 py-6 transition-colors hover:bg-[#121b24]/50 sm:px-3 sm:py-7">
       <div className="space-y-4">
         <div className="flex-1 space-y-1.5">
           <a
@@ -188,7 +212,7 @@ function StandardReadingCard({ reading }: ReadingCardProps) {
             </p>
           )}
         </div>
-        <div className="flex items-center justify-between border-t border-[#222e45] pt-3 text-[0.6rem] uppercase tracking-[0.24em] text-[#bda986]">
+        <div className="flex items-center justify-between pt-1 text-[0.6rem] uppercase tracking-[0.24em] text-[#bda986]">
           <Rating rating={reading.rating} />
           <span className="text-[#9f8d6c]">{formatReviewDate(reading.reviewDate)}</span>
         </div>
@@ -201,27 +225,29 @@ function TweetCard({ reading }: ReadingCardProps) {
   useTwitterWidgets();
 
   return (
-    <article className="mx-auto w-full overflow-hidden rounded-2xl border border-[#1f2b42] bg-[#0f192c] p-0 shadow-[0_18px_45px_rgba(1,4,12,0.35)] self-center sm:max-w-[560px]">
-      {reading.tweetEmbedHtml ? (
-        <div
-          className="tweet-embed text-[#f5ecda]"
-          dangerouslySetInnerHTML={{ __html: reading.tweetEmbedHtml }}
-        />
-      ) : (
-        <div className="p-3 sm:p-4">
-          <p className="text-sm text-[#c6b798]">
-            Tweet preview unavailable.{" "}
-            <a
-              href={reading.link}
-              target="_blank"
-              rel="noreferrer"
-              className="underline underline-offset-2"
-            >
-              View it on X
-            </a>
-          </p>
-        </div>
-      )}
+    <article className="px-2 py-3 transition-colors hover:bg-[#121b24]/50 sm:px-3 sm:py-4">
+      <div className="mx-auto w-full overflow-hidden sm:max-w-[560px]">
+        {reading.tweetEmbedHtml ? (
+          <div
+            className="tweet-embed text-[#f5ecda]"
+            dangerouslySetInnerHTML={{ __html: reading.tweetEmbedHtml }}
+          />
+        ) : (
+          <div>
+            <p className="text-sm text-[#c6b798]">
+              Tweet preview unavailable.{" "}
+              <a
+                href={reading.link}
+                target="_blank"
+                rel="noreferrer"
+                className="underline underline-offset-2"
+              >
+                View it on X
+              </a>
+            </p>
+          </div>
+        )}
+      </div>
     </article>
   );
 }
