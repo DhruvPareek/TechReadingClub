@@ -1,29 +1,65 @@
 @import "tailwindcss";
 
 :root {
-  --navy-deep: #030710;
-  --navy: #0b1427;
-  --navy-soft: #111c33;
-  --cream: #f5ecda;
-  --gold: #cdbc9f;
+  /* Light mode (default) */
+  --bg-deep: #faf8f4;
+  --bg-primary: #f5f1e8;
+  --bg-soft: #ebe6db;
+  --bg-card: #ffffff;
+  --bg-hover: #f0ebe0;
+  --text-primary: #1a1a1a;
+  --text-secondary: #4a4a4a;
+  --text-muted: #6b6b6b;
+  --text-accent: #8b7355;
+  --text-title: #1a1a1a;
+  --text-card-title: #1a1a1a;
+  --border-color: #d4cfc4;
+  --border-active: #1a1a1a;
+  --star-filled: #d4a853;
+  --star-empty: #c9c4b9;
+  --shadow-color: rgba(0, 0, 0, 0.08);
+  --shadow-strong: rgba(0, 0, 0, 0.12);
+  --selection-bg: #1a1a1a;
+  --selection-text: #f5f1e8;
+}
+
+.dark {
+  /* Dark mode - original colors */
+  --bg-deep: #040812;
+  --bg-primary: #0b1427;
+  --bg-soft: #111c33;
+  --bg-card: #050c1a;
+  --bg-hover: #121b24;
+  --text-primary: #f5ecda;
+  --text-secondary: #d8c9ad;
+  --text-muted: #9a8b70;
+  --text-accent: #cdbc9f;
+  --text-title: #f9f0df;
+  --text-card-title: #fff5de;
+  --border-color: #1b2842;
+  --border-active: #f5ecda;
+  --star-filled: #f7c873;
+  --star-empty: #5c6479;
+  --shadow-color: rgba(1, 4, 12, 0.45);
+  --shadow-strong: rgba(2, 5, 15, 0.65);
+  --selection-bg: #f5ecda;
+  --selection-text: #040812;
 }
 
 @theme inline {
-  --color-background: var(--navy);
-  --color-foreground: var(--cream);
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-primary);
   --font-sans: var(--font-body);
   --font-mono: "Space Mono", "IBM Plex Mono", monospace;
 }
 
 body {
-  background-color: var(--navy-deep);
-  background-image: radial-gradient(circle at 20% 20%, #132036 0, transparent 50%),
-    radial-gradient(circle at 80% 0%, #0f1a2f 0, transparent 45%),
-    radial-gradient(circle at 30% 90%, #0b1427 0, transparent 35%);
-  color: var(--cream);
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
   font-family: var(--font-body), "Space Grotesk", "Inter", system-ui, -apple-system,
     BlinkMacSystemFont, sans-serif;
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .font-display {
@@ -33,17 +69,17 @@ body {
 
 a {
   color: inherit;
-  text-decoration-color: rgba(245, 236, 218, 0.5);
+  text-decoration-color: var(--text-muted);
 }
 
 ::selection {
-  background: var(--cream);
-  color: var(--navy-deep);
+  background: var(--selection-bg);
+  color: var(--selection-text);
 }
 
 .category-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+  scrollbar-color: var(--border-color) transparent;
 }
 
 .category-scrollbar::-webkit-scrollbar {
@@ -55,23 +91,57 @@ a {
 }
 
 .category-scrollbar::-webkit-scrollbar-thumb {
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1));
+  background: linear-gradient(90deg, var(--border-color), var(--bg-soft));
   border-radius: 999px;
 }
 
 .category-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.18));
+  background: linear-gradient(90deg, var(--text-muted), var(--border-color));
 }
 
 .reading-card-title {
-  text-shadow: 0 6px 18px rgba(3, 7, 16, 0.85);
   transition: text-shadow 200ms ease, color 200ms ease;
 }
 
-.group:hover .reading-card-title {
+/* Light mode title shadow */
+:root:not(.dark) .reading-card-title {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+:root:not(.dark) .group:hover .reading-card-title {
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  color: #000000;
+}
+
+/* Dark mode title shadow */
+.dark .reading-card-title {
+  text-shadow: 0 6px 18px rgba(3, 7, 16, 0.85);
+}
+
+.dark .group:hover .reading-card-title {
   text-shadow:
     0 12px 28px rgba(5, 12, 28, 0.95),
     0 0 18px rgba(245, 236, 218, 0.35);
   color: #fffef3;
 }
 
+/* Theme toggle button styles */
+.theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 50;
+  padding: 0.625rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.theme-toggle:hover {
+  background-color: var(--bg-hover);
+  box-shadow: 0 4px 12px var(--shadow-strong);
+}

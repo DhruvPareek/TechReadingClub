@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { Playfair_Display, Space_Grotesk } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 const display = Playfair_Display({
@@ -30,9 +31,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${display.variable} ${body.variable} antialiased`}>
-        {children}
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
         <Analytics />
       </body>
     </html>
