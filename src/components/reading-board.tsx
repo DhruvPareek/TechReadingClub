@@ -98,40 +98,53 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
   return (
     <section
       id={CATALOG_SECTION_ID}
-      className="mx-auto w-full rounded-[40px] border border-[#1d2942] bg-[#0b1427]/90 p-6 text-[#f5ecda] shadow-[0_25px_80px_rgba(1,4,12,0.45)] sm:w-[80%] sm:p-10"
+      className="mx-auto w-full rounded-none border-0 bg-transparent px-2 py-4 text-[#f5ecda] shadow-none sm:rounded-[40px] sm:border sm:border-[#1d2942] sm:bg-[#0b1427]/90 sm:p-10 sm:shadow-[0_25px_80px_rgba(1,4,12,0.45)] sm:w-[80%]"
     >
-      <header className="mb-6 flex flex-wrap items-center justify-center gap-3 text-center sm:mb-6 sm:justify-between sm:gap-4 sm:text-left">
-        <div className="flex-1 min-w-[180px] text-center sm:text-left">
-          <p className="text-xs uppercase tracking-[0.4em] text-[#cfc0a3]">
+      <header className="mb-6 flex flex-col gap-3 sm:mb-6 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <div className="flex items-center justify-center gap-2 rounded-xl border border-[#1d2942] bg-[#0a1020]/60 px-4 py-2.5 sm:justify-start sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
+          <svg
+            className="h-4 w-4 text-[#cfc0a3] sm:hidden"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={1.5}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
+            />
+          </svg>
+          <span className="text-xs font-medium uppercase tracking-[0.3em] text-[#f5ecda] sm:text-[#cfc0a3] sm:tracking-[0.4em]">
             Catalog
-          </p>
+          </span>
         </div>
-        <div className="flex items-center justify-center gap-2 text-xs uppercase tracking-[0.3em] text-[#f5ecda] sm:justify-end">
-          <span className="text-[#cfc0a3]">SORT BY:</span>
+        <div className="flex items-center justify-center gap-1 rounded-xl border border-[#1d2942] bg-[#0a1020]/60 px-3 py-2 text-xs uppercase tracking-[0.2em] sm:justify-end sm:gap-2 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:tracking-[0.3em]">
+          <span className="mr-1 text-[#7a6f5a] sm:mr-0 sm:text-[#cfc0a3]">Sort:</span>
           <button
             type="button"
             onClick={() => setSortMode("date")}
-            className={`transition ${
+            className={`rounded-lg px-2.5 py-1 transition sm:rounded-none sm:px-0 sm:py-0 ${
               sortMode === "date"
-                ? "font-bold underline underline-offset-4"
-                : "text-[#c6b798] hover:text-[#f5ecda]"
+                ? "bg-[#1d2942] font-semibold text-[#f5ecda] sm:bg-transparent sm:underline sm:underline-offset-4"
+                : "text-[#9a8b70] hover:bg-[#1d2942]/50 hover:text-[#f5ecda] sm:text-[#c6b798] sm:hover:bg-transparent"
             }`}
             aria-pressed={sortMode === "date"}
           >
-            DATE
+            Date
           </button>
-          <span className="text-[#cfc0a3]">/</span>
+          <span className="hidden text-[#cfc0a3] sm:inline">/</span>
           <button
             type="button"
             onClick={() => setSortMode("rating")}
-            className={`transition ${
+            className={`rounded-lg px-2.5 py-1 transition sm:rounded-none sm:px-0 sm:py-0 ${
               sortMode === "rating"
-                ? "font-bold underline underline-offset-4"
-                : "text-[#c6b798] hover:text-[#f5ecda]"
+                ? "bg-[#1d2942] font-semibold text-[#f5ecda] sm:bg-transparent sm:underline sm:underline-offset-4"
+                : "text-[#9a8b70] hover:bg-[#1d2942]/50 hover:text-[#f5ecda] sm:text-[#c6b798] sm:hover:bg-transparent"
             }`}
             aria-pressed={sortMode === "rating"}
           >
-            RATING
+            Rating
           </button>
         </div>
       </header>
@@ -160,7 +173,6 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
           );
         })}
       </nav>
-
       <div
         className={
           activeCategory === "Tweets"
