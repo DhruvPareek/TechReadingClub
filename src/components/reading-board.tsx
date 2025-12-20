@@ -29,6 +29,7 @@ type SortMode = "date" | "rating";
 const TWITTER_WIDGETS_SRC = "https://platform.twitter.com/widgets.js";
 let twitterWidgetsLoaded = false;
 const SORT_MODE_STORAGE_KEY = "reading-board-sort-mode";
+const CATEGORY_NAV_SCROLL_KEY = "reading-board-category-nav-scroll";
 
 export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
   const router = useRouter();
@@ -39,8 +40,20 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
     persistSortMode(sortMode);
   }, [sortMode]);
 
+  // Restore scroll position on mount
+  useEffect(() => {
+    const savedScrollLeft = sessionStorage.getItem(CATEGORY_NAV_SCROLL_KEY);
+    if (savedScrollLeft !== null && categoryNavRef.current) {
+      categoryNavRef.current.scrollLeft = Number(savedScrollLeft);
+    }
+  }, []);
+
   const handleCategoryChange = (category: Category) => {
     if (category === activeCategory) return;
+    // Save current scroll position before navigation
+    if (categoryNavRef.current) {
+      sessionStorage.setItem(CATEGORY_NAV_SCROLL_KEY, String(categoryNavRef.current.scrollLeft));
+    }
     router.push(`/${categoryToSlug(category)}`, { scroll: false });
   };
 
