@@ -28,15 +28,12 @@ const STARS = [1, 2, 3, 4, 5] as const;
 type SortMode = "date" | "rating";
 const TWITTER_WIDGETS_SRC = "https://platform.twitter.com/widgets.js";
 let twitterWidgetsLoaded = false;
-const CATALOG_SECTION_ID = "catalog-section";
-const CATEGORY_SCROLL_STORAGE_KEY = "reading-board-category-scroll-left";
 const SORT_MODE_STORAGE_KEY = "reading-board-sort-mode";
 
 export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
   const router = useRouter();
   const [sortMode, setSortMode] = useState<SortMode>(() => readStoredSortMode());
   const categoryNavRef = useRef<HTMLDivElement | null>(null);
-  const lastScrollLeftRef = useRef(0);
 
   useEffect(() => {
     persistSortMode(sortMode);
@@ -44,16 +41,7 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
 
   const handleCategoryChange = (category: Category) => {
     if (category === activeCategory) return;
-    if (categoryNavRef.current) {
-      const scrollLeft = categoryNavRef.current.scrollLeft;
-      lastScrollLeftRef.current = scrollLeft;
-      persistCategoryScrollLeft(scrollLeft);
-    }
     router.push(`/${categoryToSlug(category)}`, { scroll: false });
-    if (typeof window !== "undefined") {
-      const section = document.getElementById(CATALOG_SECTION_ID);
-      section?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
   };
 
   const filteredReadings = useMemo(
@@ -82,81 +70,12 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
     );
   }, [filteredReadings, sortMode, activeCategory]);
 
-  useEffect(() => {
-    const node = categoryNavRef.current;
-    if (!node) return undefined;
-    const storedScrollLeft = readStoredCategoryScrollLeft();
-    lastScrollLeftRef.current = storedScrollLeft;
-    node.scrollLeft = storedScrollLeft;
-
-    const handleScroll = () => {
-      lastScrollLeftRef.current = node.scrollLeft;
-      persistCategoryScrollLeft(node.scrollLeft);
-    };
-
-    node.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      node.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   return (
-    <section
-      id={CATALOG_SECTION_ID}
-      className="mx-auto w-full rounded-none border-0 bg-transparent px-2 py-4 text-[var(--text-primary)] shadow-none sm:rounded-[40px] sm:border sm:border-[var(--border-color)] sm:bg-[var(--bg-primary)]/90 sm:p-10 sm:shadow-[0_25px_80px_var(--shadow-color)] sm:w-[80%]"
-    >
-      <header className="mb-6 flex flex-col gap-3 sm:mb-6 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-        <div className="flex items-center justify-center gap-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)]/60 px-4 py-2.5 sm:justify-start sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
-          <svg
-            className="h-4 w-4 text-[var(--text-accent)] sm:hidden"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={1.5}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
-            />
-          </svg>
-          <span className="text-xs font-medium uppercase tracking-[0.3em] text-[var(--text-primary)] sm:text-[var(--text-accent)] sm:tracking-[0.4em]">
-            Catalog
-          </span>
-        </div>
-        <div className="flex items-center justify-center gap-1 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)]/60 px-3 py-2 text-xs uppercase tracking-[0.2em] sm:justify-end sm:gap-2 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:tracking-[0.3em]">
-          <span className="mr-1 text-[var(--text-muted)] sm:mr-0 sm:text-[var(--text-accent)]">Sort:</span>
-          <button
-            type="button"
-            onClick={() => setSortMode("date")}
-            className={`rounded-lg px-2.5 py-1 transition sm:rounded-none sm:px-0 sm:py-0 ${
-              sortMode === "date"
-                ? "bg-[var(--border-color)] font-semibold text-[var(--text-primary)] sm:bg-transparent sm:underline sm:underline-offset-4"
-                : "text-[var(--text-muted)] hover:bg-[var(--border-color)]/50 hover:text-[var(--text-primary)] sm:text-[var(--text-secondary)] sm:hover:bg-transparent"
-            }`}
-            aria-pressed={sortMode === "date"}
-          >
-            Date
-          </button>
-          <span className="hidden text-[var(--text-accent)] sm:inline">/</span>
-          <button
-            type="button"
-            onClick={() => setSortMode("rating")}
-            className={`rounded-lg px-2.5 py-1 transition sm:rounded-none sm:px-0 sm:py-0 ${
-              sortMode === "rating"
-                ? "bg-[var(--border-color)] font-semibold text-[var(--text-primary)] sm:bg-transparent sm:underline sm:underline-offset-4"
-                : "text-[var(--text-muted)] hover:bg-[var(--border-color)]/50 hover:text-[var(--text-primary)] sm:text-[var(--text-secondary)] sm:hover:bg-transparent"
-            }`}
-            aria-pressed={sortMode === "rating"}
-          >
-            Rating
-          </button>
-        </div>
-      </header>
-
+    <section>
+      {/* Category Navigation */}
       <nav
         ref={categoryNavRef}
-        className="category-scrollbar mb-8 flex w-full gap-3 overflow-x-auto pb-2"
+        className="category-scrollbar flex gap-1 overflow-x-auto border-b border-[var(--border)] pb-px"
       >
         {CATEGORY_DESCRIPTORS.map(({ id, label }) => {
           const isActive = activeCategory === id;
@@ -165,26 +84,51 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
               key={id}
               type="button"
               onClick={() => handleCategoryChange(id)}
-              className={`flex min-w-max flex-col rounded-2xl border px-4 py-3 text-left transition ${
+              className={`relative whitespace-nowrap px-3 py-2 text-sm transition-colors ${
                 isActive
-                  ? "border-[var(--border-active)] bg-[var(--bg-card)] text-[var(--text-primary)]"
-                  : "border-[var(--border-color)] bg-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]"
+                  ? "text-[var(--text)]"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
               }`}
             >
-              <span className="text-sm font-semibold uppercase tracking-[0.25em]">
-                {label}
-              </span>
+              {label}
+              {isActive && (
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--text)]" />
+              )}
             </button>
           );
         })}
       </nav>
-      <div
-        className={
-          activeCategory === "Tweets"
-            ? "mt-2 grid gap-1 sm:gap-1"
-            : "mt-2 divide-y divide-[var(--border-color)] border-y border-[var(--border-color)]"
-        }
-      >
+
+      {/* Sort Controls */}
+      <div className="mt-4 flex items-center justify-end gap-2 text-sm">
+        <span className="text-[var(--text-muted)]">Sort:</span>
+        <button
+          type="button"
+          onClick={() => setSortMode("date")}
+          className={`px-2 py-1 transition-colors ${
+            sortMode === "date"
+              ? "text-[var(--text)]"
+              : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
+          }`}
+        >
+          Date
+        </button>
+        <span className="text-[var(--border)]">·</span>
+        <button
+          type="button"
+          onClick={() => setSortMode("rating")}
+          className={`px-2 py-1 transition-colors ${
+            sortMode === "rating"
+              ? "text-[var(--text)]"
+              : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
+          }`}
+        >
+          Rating
+        </button>
+      </div>
+
+      {/* Reading List */}
+      <div className={activeCategory === "Tweets" ? "mt-6 space-y-2" : "mt-6 space-y-1"}>
         {sortedReadings.map((reading) => (
           <ReadingCard key={reading.id} reading={reading} />
         ))}
@@ -206,32 +150,33 @@ function ReadingCard({ reading }: ReadingCardProps) {
 
 function StandardReadingCard({ reading }: ReadingCardProps) {
   return (
-    <article className="group px-2 py-6 transition-colors hover:bg-[var(--bg-hover)]/50 sm:px-3 sm:py-7">
-      <div className="space-y-4">
-        <div className="flex-1 space-y-1.5">
+    <article className="group rounded-lg px-3 py-4 transition-colors hover:bg-[var(--bg-hover)]">
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0 flex-1">
           <a
             href={reading.link}
-            className="reading-card-title font-display text-[1.05rem] font-semibold leading-tight text-[var(--text-card-title)] underline-offset-4 transition-all hover:underline sm:text-[1.25rem]"
+            className="font-medium text-[var(--text)] decoration-[var(--border)] underline-offset-2 hover:underline"
             target="_blank"
             rel="noreferrer"
           >
             {reading.title}
           </a>
-          <div className="flex flex-wrap items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[var(--text-primary)]">
+          <div className="mt-1 flex items-center gap-2 text-sm text-[var(--text-muted)]">
             <span>{reading.author}</span>
-            <span className="normal-case rounded-full border border-[var(--text-primary)]/40 px-2 py-[2px] text-[0.55rem] font-semibold tracking-[0.08em] text-[var(--text-primary)]">
-              {reading.type}
-            </span>
+            <span>·</span>
+            <span>{reading.type}</span>
           </div>
           {reading.summary && (
-            <p className="text-[0.82rem] leading-relaxed text-[var(--text-muted)]">
+            <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
               {reading.summary}
             </p>
           )}
         </div>
-        <div className="flex items-center justify-between pt-1 text-[0.6rem] uppercase tracking-[0.24em] text-[var(--text-accent)]">
+        <div className="flex flex-col items-end gap-1 pt-0.5">
           <Rating rating={reading.rating} />
-          <span className="text-[var(--text-muted)]">{formatReviewDate(reading.reviewDate)}</span>
+          <span className="text-xs text-[var(--text-muted)]">
+            {formatReviewDate(reading.reviewDate)}
+          </span>
         </div>
       </div>
     </article>
@@ -242,27 +187,25 @@ function TweetCard({ reading }: ReadingCardProps) {
   useTwitterWidgets();
 
   return (
-    <article className="px-2 py-3 transition-colors hover:bg-[var(--bg-hover)]/50 sm:px-3 sm:py-4">
-      <div className="mx-auto w-full overflow-hidden sm:max-w-[560px]">
+    <article className="rounded-lg px-3 py-4 transition-colors hover:bg-[var(--bg-hover)]">
+      <div className="mx-auto max-w-lg">
         {reading.tweetEmbedHtml ? (
           <div
-            className="tweet-embed text-[var(--text-primary)]"
+            className="tweet-embed"
             dangerouslySetInnerHTML={{ __html: reading.tweetEmbedHtml }}
           />
         ) : (
-          <div>
-            <p className="text-sm text-[var(--text-secondary)]">
-              Tweet preview unavailable.{" "}
-              <a
-                href={reading.link}
-                target="_blank"
-                rel="noreferrer"
-                className="underline underline-offset-2"
-              >
-                View it on X
-              </a>
-            </p>
-          </div>
+          <p className="text-sm text-[var(--text-muted)]">
+            Tweet unavailable.{" "}
+            <a
+              href={reading.link}
+              target="_blank"
+              rel="noreferrer"
+              className="underline underline-offset-2"
+            >
+              View on X
+            </a>
+          </p>
         )}
       </div>
     </article>
@@ -271,7 +214,7 @@ function TweetCard({ reading }: ReadingCardProps) {
 
 function Rating({ rating }: { rating: number }) {
   return (
-    <div className="flex items-center gap-[2px]" aria-label={`${rating} out of 5 stars`}>
+    <div className="flex items-center gap-0.5" aria-label={`${rating} out of 5 stars`}>
       {STARS.map((value) => (
         <StarIcon key={value} filled={value <= rating} />
       ))}
@@ -283,11 +226,11 @@ function StarIcon({ filled }: { filled: boolean }) {
   return (
     <svg
       aria-hidden="true"
-      viewBox="0 0 24 24"
+      viewBox="0 0 20 20"
       className={`h-3.5 w-3.5 ${filled ? "text-[var(--star-filled)]" : "text-[var(--star-empty)]"}`}
       fill="currentColor"
     >
-      <path d="M12 17.3 6.6 20l1-5.8L3 9.8l5.8-.8L12 4l3.2 5 5.8.8-4.2 4.4 1 5.8z" />
+      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
     </svg>
   );
 }
@@ -295,9 +238,7 @@ function StarIcon({ filled }: { filled: boolean }) {
 function formatReviewDate(dateString: string) {
   const date = new Date(dateString);
   if (Number.isNaN(date.getTime())) return dateString;
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = date.getFullYear();
-  return `${month}/${year}`;
+  return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
 }
 
 function isTweetReading(reading: Reading) {
@@ -327,21 +268,6 @@ function useTwitterWidgets() {
       script.removeEventListener("load", loadWidgets);
     };
   }, []);
-}
-
-function readStoredCategoryScrollLeft() {
-  if (typeof window === "undefined") return 0;
-  const rawValue = window.sessionStorage.getItem(CATEGORY_SCROLL_STORAGE_KEY);
-  const parsed = rawValue ? Number(rawValue) : 0;
-  return Number.isFinite(parsed) ? parsed : 0;
-}
-
-function persistCategoryScrollLeft(value: number) {
-  if (typeof window === "undefined") return;
-  window.sessionStorage.setItem(
-    CATEGORY_SCROLL_STORAGE_KEY,
-    String(Math.max(0, value)),
-  );
 }
 
 function readStoredSortMode(): SortMode {

@@ -21,33 +21,25 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const readings = await fetchReadingsFromSheet();
 
   return (
-    <div className="min-h-screen text-[var(--text-primary)]">
-      <main className="mx-auto flex min-h-screen max-w-5xl flex-col gap-10 px-5 py-12 sm:px-8 lg:px-0">
-        <section className="rounded-[56px] border border-[var(--border-color)] bg-[var(--bg-primary)]/80 px-6 py-14 text-center shadow-[0_45px_160px_var(--shadow-strong)] sm:px-12">
-          <div className="flex items-center justify-center gap-6 text-[10px] uppercase tracking-[0.55em] text-[var(--text-accent)]">
-            <span className="hidden h-px w-16 bg-current sm:block" aria-hidden />
-            <span>Towards accelerating progress</span>
-            <span className="hidden h-px w-16 bg-current sm:block" aria-hidden />
-          </div>
-          <h1 className="mt-6 font-display text-[clamp(2.8rem,6vw,4.8rem)] uppercase leading-tight tracking-[0.18em] text-[var(--text-title)]">
-            <span className="block">The</span>
-            <span className="block">Technology</span>
-            <span className="block">Reading</span>
-            <span className="block">Club</span>
+    <div className="min-h-screen">
+      <main className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+        <header className="mb-12 text-center">
+          <h1 className="font-display text-3xl font-medium tracking-tight text-[var(--text)] sm:text-4xl">
+            The Technology Reading Club
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[var(--text-secondary)] sm:text-lg">
-            I keep a list of loosely technology related readings here.
+          <p className="mt-3 flex items-center justify-center gap-3 text-xs uppercase tracking-widest text-[var(--text-muted)]">
+            <span className="h-px w-8 bg-current" />
+            <span>Towards accelerating progress</span>
+            <span className="h-px w-8 bg-current" />
           </p>
-        </section>
+        </header>
 
         <ReadingBoard readings={readings} activeCategory={category} />
 
-        <footer className="pb-8 text-center text-xs uppercase tracking-[0.4em] text-[var(--text-accent)]">
-          email submissions to dhruvpareek883 [at] gmail.com
+        <footer className="mt-16 border-t border-[var(--border)] pt-8 text-center text-sm text-[var(--text-muted)]">
+          Submissions: dhruvpareek883@gmail.com
         </footer>
       </main>
     </div>
   );
 }
-
-
