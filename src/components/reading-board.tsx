@@ -92,6 +92,7 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
       >
         {CATEGORY_DESCRIPTORS.map(({ id, label }) => {
           const isActive = activeCategory === id;
+          const isFeatured = id === "Featured";
           return (
             <button
               key={id}
@@ -101,9 +102,12 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
                 isActive
                   ? "text-[var(--text)]"
                   : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
-              }`}
+              } ${isFeatured ? "" : ""}`}
             >
-              {label}
+              <span className="inline-flex items-center gap-1">
+                {isFeatured && <FeaturedSparkle />}
+                {label}
+              </span>
               {isActive && (
                 <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--text)]" />
               )}
@@ -252,6 +256,19 @@ function formatReviewDate(dateString: string) {
   const date = new Date(dateString);
   if (Number.isNaN(date.getTime())) return dateString;
   return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+}
+
+function FeaturedSparkle() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 20 20"
+      className="h-3 w-3 text-[var(--text-muted)]"
+      fill="currentColor"
+    >
+      <path d="M9.048 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+    </svg>
+  );
 }
 
 function isTweetReading(reading: Reading) {

@@ -1,4 +1,5 @@
 export const CATEGORY_ORDER = [
+  "Featured",
   "Companies",
   "People",
   "Technical",
@@ -30,6 +31,7 @@ export type CategoryDescriptor = {
 };
 
 export const CATEGORY_SLUGS: Record<Category, string> = {
+  Featured: "featured",
   Companies: "companies",
   People: "people",
   Technical: "technical",
@@ -59,6 +61,10 @@ export function categoryFromSlug(slug: string | undefined | null) {
 }
 
 export const CATEGORY_DESCRIPTORS: CategoryDescriptor[] = [
+  {
+    id: "Featured",
+    label: "Featured",
+  },
   {
     id: "Companies",
     label: "Companies",
