@@ -77,6 +77,52 @@ a {
   background: var(--text-muted);
 }
 
+/* Tweet embeds */
+.tweet-shell {
+  position: relative;
+  min-height: 12rem;
+}
+
+.tweet-embed,
+.tweet-preview {
+  min-height: inherit;
+}
+
+.tweet-embed-pending {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tweet-embed .twitter-tweet,
+.tweet-preview blockquote {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100% !important;
+  margin: 0 !important;
+  color: var(--text);
+  font-family: var(--font-body), "Inter", system-ui, -apple-system, sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.tweet-embed .twitter-tweet p,
+.tweet-preview blockquote p {
+  margin: 0 0 0.75rem;
+}
+
+.tweet-embed .twitter-tweet a,
+.tweet-preview blockquote a {
+  color: #1d9bf0;
+  overflow-wrap: anywhere;
+}
+
+.tweet-embed iframe {
+  margin-inline: auto !important;
+}
+
 /* Theme toggle */
 .theme-toggle {
   position: fixed;

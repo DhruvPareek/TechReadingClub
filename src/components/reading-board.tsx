@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { useRouter } from "next/navigation";
 import {
   CATEGORY_DESCRIPTORS,
@@ -13,7 +13,12 @@ declare global {
   interface Window {
     twttr?: {
       widgets?: {
-        load: () => void;
+        createTweet: (
+          tweetId: string,
+          element: HTMLElement,
+          options?: { dnt?: boolean },
+        ) => Promise<HTMLElement | undefined>;
+        load: (element?: HTMLElement) => void | Promise<unknown>;
       };
     };
   }
@@ -27,7 +32,8 @@ type ReadingBoardProps = {
 const STARS = [1, 2, 3, 4, 5] as const;
 type SortMode = "date" | "rating";
 const TWITTER_WIDGETS_SRC = "https://platform.twitter.com/widgets.js";
-let twitterWidgetsLoaded = false;
+const TWEET_HYDRATION_ROOT_MARGIN = "900px 0px";
+let twitterWidgetsScriptPromise: Promise<void> | null = null;
 const SORT_MODE_STORAGE_KEY = "reading-board-sort-mode";
 const CATEGORY_NAV_SCROLL_KEY = "reading-board-category-nav-scroll";
 
@@ -117,32 +123,34 @@ export function ReadingBoard({ readings, activeCategory }: ReadingBoardProps) {
       </nav>
 
       {/* Sort Controls */}
-      <div className="mt-4 flex items-center justify-end gap-2 text-sm">
-        <span className="text-[var(--text-muted)]">Sort:</span>
-        <button
-          type="button"
-          onClick={() => setSortMode("date")}
-          className={`px-2 py-1 transition-colors ${
-            sortMode === "date"
-              ? "text-[var(--text)]"
-              : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
-          }`}
-        >
-          Date
-        </button>
-        <span className="text-[var(--border)]">·</span>
-        <button
-          type="button"
-          onClick={() => setSortMode("rating")}
-          className={`px-2 py-1 transition-colors ${
-            sortMode === "rating"
-              ? "text-[var(--text)]"
-              : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
-          }`}
-        >
-          Rating
-        </button>
-      </div>
+      {activeCategory !== "Tweets" && (
+        <div className="mt-4 flex items-center justify-end gap-2 text-sm">
+          <span className="text-[var(--text-muted)]">Sort:</span>
+          <button
+            type="button"
+            onClick={() => setSortMode("date")}
+            className={`px-2 py-1 transition-colors ${
+              sortMode === "date"
+                ? "text-[var(--text)]"
+                : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
+            }`}
+          >
+            Date
+          </button>
+          <span className="text-[var(--border)]">·</span>
+          <button
+            type="button"
+            onClick={() => setSortMode("rating")}
+            className={`px-2 py-1 transition-colors ${
+              sortMode === "rating"
+                ? "text-[var(--text)]"
+                : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
+            }`}
+          >
+            Rating
+          </button>
+        </div>
+      )}
 
       {/* Reading List */}
       <div className={activeCategory === "Tweets" ? "mt-6 space-y-2" : "mt-6 space-y-1"}>
@@ -201,16 +209,50 @@ function StandardReadingCard({ reading }: ReadingCardProps) {
 }
 
 function TweetCard({ reading }: ReadingCardProps) {
-  useTwitterWidgets();
+  const [cardRef, isNearViewport] = useNearViewport<HTMLElement>();
+  const embedRef = useRef<HTMLDivElement | null>(null);
+  const tweetEmbedHtml = useMemo(
+    () => normalizeTweetEmbedHtml(reading.tweetEmbedHtml),
+    [reading.tweetEmbedHtml],
+  );
+  const tweetId = getTweetId(reading.link, tweetEmbedHtml);
+  const tweetPreviewHtml = useMemo(
+    () => (tweetEmbedHtml ? buildTweetPreviewHtml(tweetEmbedHtml) : undefined),
+    [tweetEmbedHtml],
+  );
+  const isTweetEmbedRendered = useTwitterTweetEmbed(
+    embedRef,
+    tweetId,
+    Boolean(tweetId) && isNearViewport,
+  );
+
+  const shouldShowPreview = !isNearViewport || !tweetId || !isTweetEmbedRendered;
 
   return (
-    <article className="rounded-lg px-3 py-4 transition-colors hover:bg-[var(--bg-hover)]">
+    <article
+      ref={cardRef}
+      className="px-3 py-4"
+    >
       <div className="mx-auto max-w-lg">
-        {reading.tweetEmbedHtml ? (
-          <div
-            className="tweet-embed"
-            dangerouslySetInnerHTML={{ __html: reading.tweetEmbedHtml }}
-          />
+        {tweetEmbedHtml ? (
+          <div className="tweet-shell">
+            {shouldShowPreview && (
+              <div
+                className="tweet-preview"
+                dangerouslySetInnerHTML={{ __html: tweetPreviewHtml ?? "" }}
+              />
+            )}
+            {tweetId && isNearViewport && (
+              <div
+                ref={embedRef}
+                className={
+                  isTweetEmbedRendered
+                    ? "tweet-embed"
+                    : "tweet-embed tweet-embed-pending"
+                }
+              />
+            )}
+          </div>
         ) : (
           <p className="text-sm text-[var(--text-muted)]">
             Tweet unavailable.{" "}
@@ -275,29 +317,164 @@ function isTweetReading(reading: Reading) {
   return reading.categories.includes("Tweets") || reading.type === "Tweet";
 }
 
-function useTwitterWidgets() {
+function useTwitterTweetEmbed(
+  containerRef: RefObject<HTMLElement | null>,
+  tweetId: string | undefined,
+  shouldLoad: boolean,
+) {
+  const [renderedTweetId, setRenderedTweetId] = useState<string>();
+
   useEffect(() => {
-    if (typeof window === "undefined") return undefined;
-
-    const loadWidgets = () => window.twttr?.widgets?.load();
-
-    if (twitterWidgetsLoaded) {
-      loadWidgets();
+    if (typeof window === "undefined" || !shouldLoad || !tweetId) {
       return undefined;
+    }
+
+    const container = containerRef.current;
+    if (!container) return undefined;
+
+    let isCancelled = false;
+    container.replaceChildren();
+
+    loadTwitterWidgetsScript()
+      .then(() => {
+        if (isCancelled) return undefined;
+        const widgetPromise = window.twttr?.widgets?.createTweet(tweetId, container, {
+          dnt: true,
+        });
+        return widgetPromise?.then((widget) => {
+          if (!isCancelled && widget) {
+            setRenderedTweetId(tweetId);
+          }
+        });
+      })
+      .catch(() => {
+        if (!isCancelled) {
+          twitterWidgetsScriptPromise = null;
+        }
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [containerRef, shouldLoad, tweetId]);
+
+  return renderedTweetId === tweetId;
+}
+
+function useNearViewport<TElement extends HTMLElement>() {
+  const elementRef = useRef<TElement | null>(null);
+  const [isNearViewport, setIsNearViewport] = useState(false);
+
+  useEffect(() => {
+    if (isNearViewport) return undefined;
+
+    const element = elementRef.current;
+    if (!element) return undefined;
+
+    if (!("IntersectionObserver" in window)) {
+      const timeout = setTimeout(() => setIsNearViewport(true), 0);
+      return () => clearTimeout(timeout);
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsNearViewport(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: TWEET_HYDRATION_ROOT_MARGIN },
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isNearViewport]);
+
+  return [elementRef, isNearViewport] as const;
+}
+
+function loadTwitterWidgetsScript() {
+  if (window.twttr?.widgets) {
+    return Promise.resolve();
+  }
+
+  if (twitterWidgetsScriptPromise) {
+    return twitterWidgetsScriptPromise;
+  }
+
+  twitterWidgetsScriptPromise = new Promise<void>((resolve, reject) => {
+    const existingScript = document.querySelector<HTMLScriptElement>(
+      `script[src="${TWITTER_WIDGETS_SRC}"]`,
+    );
+
+    const handleLoad = () => resolve();
+    const handleError = () => {
+      twitterWidgetsScriptPromise = null;
+      reject(new Error("Failed to load Twitter widgets"));
+    };
+
+    if (existingScript) {
+      existingScript.addEventListener("load", handleLoad, { once: true });
+      existingScript.addEventListener("error", handleError, { once: true });
+      return;
     }
 
     const script = document.createElement("script");
     script.src = TWITTER_WIDGETS_SRC;
     script.async = true;
     script.charset = "utf-8";
-    script.addEventListener("load", loadWidgets);
+    script.addEventListener("load", handleLoad, { once: true });
+    script.addEventListener("error", handleError, { once: true });
     document.body.appendChild(script);
-    twitterWidgetsLoaded = true;
+  });
 
-    return () => {
-      script.removeEventListener("load", loadWidgets);
-    };
-  }, []);
+  return twitterWidgetsScriptPromise;
+}
+
+function normalizeTweetEmbedHtml(html: string | undefined) {
+  if (!html) return undefined;
+  return stripScriptTags(html)
+    .replace(/<blockquote\b(?![^>]*\bdata-dnt=)/i, '<blockquote data-dnt="true"')
+    .trim();
+}
+
+function buildTweetPreviewHtml(html: string) {
+  return removeClassToken(html, "twitter-tweet");
+}
+
+function getTweetId(link: string, tweetEmbedHtml: string | undefined) {
+  const candidates = [link, tweetEmbedHtml].filter(
+    (candidate): candidate is string => Boolean(candidate),
+  );
+
+  for (const candidate of candidates) {
+    const match = candidate.match(/status(?:es)?\/(\d+)/i);
+    if (match) return match[1];
+  }
+
+  return undefined;
+}
+
+function stripScriptTags(html: string) {
+  return html.replace(
+    /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+    "",
+  );
+}
+
+function removeClassToken(html: string, className: string) {
+  return html.replace(/\sclass=(["'])(.*?)\1/gi, (_match, quote, classes) => {
+    const nextClasses = classes
+      .split(/\s+/)
+      .filter(Boolean)
+      .filter((token: string) => token !== className)
+      .join(" ");
+
+    return nextClasses ? ` class=${quote}${nextClasses}${quote}` : "";
+  });
 }
 
 function readStoredSortMode(): SortMode {
