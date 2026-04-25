@@ -33,6 +33,7 @@ const STARS = [1, 2, 3, 4, 5] as const;
 type SortMode = "date" | "rating";
 const TWITTER_WIDGETS_SRC = "https://platform.twitter.com/widgets.js";
 const TWEET_HYDRATION_ROOT_MARGIN = "900px 0px";
+const TWEET_EMBED_SCALE = 0.84;
 let twitterWidgetsScriptPromise: Promise<void> | null = null;
 const SORT_MODE_STORAGE_KEY = "reading-board-sort-mode";
 const CATEGORY_NAV_SCROLL_KEY = "reading-board-category-nav-scroll";
@@ -231,7 +232,7 @@ function TweetCard({ reading }: ReadingCardProps) {
   return (
     <article
       ref={cardRef}
-      className="px-3 py-4"
+      className="py-2"
     >
       <div className="mx-auto max-w-lg">
         {tweetEmbedHtml ? (
@@ -333,16 +334,40 @@ function useTwitterTweetEmbed(
     if (!container) return undefined;
 
     let isCancelled = false;
+    let resizeObserver: ResizeObserver | undefined;
     container.replaceChildren();
+    container.style.removeProperty("height");
+
+    const scaleFrame = document.createElement("div");
+    scaleFrame.className = "tweet-embed-scale";
+    container.appendChild(scaleFrame);
+
+    const syncScaledHeight = () => {
+      const height = scaleFrame.scrollHeight;
+      if (height > 0) {
+        container.style.height = `${Math.ceil(height * TWEET_EMBED_SCALE)}px`;
+      }
+    };
+
+    const scheduleHeightSync = () => {
+      requestAnimationFrame(syncScaledHeight);
+      window.setTimeout(syncScaledHeight, 250);
+      window.setTimeout(syncScaledHeight, 1000);
+    };
 
     loadTwitterWidgetsScript()
       .then(() => {
         if (isCancelled) return undefined;
-        const widgetPromise = window.twttr?.widgets?.createTweet(tweetId, container, {
+        const widgetPromise = window.twttr?.widgets?.createTweet(tweetId, scaleFrame, {
           dnt: true,
         });
         return widgetPromise?.then((widget) => {
           if (!isCancelled && widget) {
+            scheduleHeightSync();
+            if ("ResizeObserver" in window) {
+              resizeObserver = new ResizeObserver(syncScaledHeight);
+              resizeObserver.observe(scaleFrame);
+            }
             setRenderedTweetId(tweetId);
           }
         });
@@ -355,6 +380,8 @@ function useTwitterTweetEmbed(
 
     return () => {
       isCancelled = true;
+      resizeObserver?.disconnect();
+      container.style.removeProperty("height");
     };
   }, [containerRef, shouldLoad, tweetId]);
 
