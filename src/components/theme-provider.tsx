@@ -36,11 +36,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     
     const root = document.documentElement;
     
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
+    // Set both classes so react-tweet follows the site toggle instead of the OS preference.
+    root.classList.toggle("dark", theme === "dark");
+    root.classList.toggle("light", theme === "light");
     
     localStorage.setItem(THEME_STORAGE_KEY, theme);
   }, [theme, mounted]);

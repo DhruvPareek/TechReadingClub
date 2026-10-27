@@ -94,15 +94,9 @@ a {
   }
 }
 
+/* Keep X's own fonts and colors; only remove the outer margin so card spacing is ours. */
 .tweet-card .react-tweet-theme {
   --tweet-container-margin: 0;
-  --tweet-body-font-size: 1rem;
-  --tweet-body-line-height: 1.45rem;
-  --tweet-bg-color: var(--bg-card);
-  --tweet-bg-color-hover: var(--bg-hover);
-  --tweet-font-color: var(--text);
-  --tweet-font-color-secondary: var(--text-secondary);
-  --tweet-border: 1px solid var(--border);
 }
 
 .tweet-fallback {
