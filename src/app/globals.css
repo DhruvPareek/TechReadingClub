@@ -77,54 +77,39 @@ a {
   background: var(--text-muted);
 }
 
-/* Tweet embeds */
-.tweet-shell {
-  position: relative;
+/* Tweet cards */
+.tweet-card .react-tweet-theme {
+  --tweet-container-margin: 0;
+  --tweet-body-font-size: 1rem;
+  --tweet-body-line-height: 1.45rem;
+  --tweet-bg-color: var(--bg-card);
+  --tweet-bg-color-hover: var(--bg-hover);
+  --tweet-font-color: var(--text);
+  --tweet-font-color-secondary: var(--text-secondary);
+  --tweet-border: 1px solid var(--border);
 }
 
-.tweet-embed {
-  overflow: hidden;
-}
-
-.tweet-embed-scale {
-  transform: scale(0.84);
-  transform-origin: top center;
-}
-
-.tweet-embed-pending {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.tweet-embed .twitter-tweet,
-.tweet-preview blockquote {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 100% !important;
-  margin: 0 !important;
+.tweet-fallback {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  background: var(--bg-card);
   color: var(--text);
-  font-family: var(--font-body), "Inter", system-ui, -apple-system, sans-serif;
-  font-size: 0.8125rem;
-  line-height: 1.35;
-}
-
-.tweet-embed .twitter-tweet p,
-.tweet-preview blockquote p {
-  margin: 0 0 0.75rem;
-}
-
-.tweet-embed .twitter-tweet a,
-.tweet-preview blockquote a {
-  color: #1d9bf0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
   overflow-wrap: anywhere;
 }
 
-.tweet-embed iframe {
-  display: block !important;
-  margin: 0 auto !important;
+.tweet-fallback blockquote {
+  margin: 0;
+}
+
+.tweet-fallback p {
+  margin: 0 0 0.75rem;
+}
+
+.tweet-fallback a {
+  color: #1d9bf0;
 }
 
 /* Theme toggle */

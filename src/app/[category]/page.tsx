@@ -1,4 +1,5 @@
 import { ReadingBoard } from "@/components/reading-board";
+import { TweetCard } from "@/components/tweet-card";
 import { fetchReadingsFromSheet } from "@/lib/google-sheets";
 import { categoryFromSlug } from "@/types/readings";
 import { notFound } from "next/navigation";
@@ -19,6 +20,15 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   }
 
   const readings = await fetchReadingsFromSheet();
+  const tweetCards = Object.fromEntries(
+    readings
+      .filter(
+        (reading) =>
+          reading.categories.includes(category) &&
+          (reading.type === "Tweet" || reading.categories.includes("Tweets")),
+      )
+      .map((reading) => [reading.id, <TweetCard key={reading.id} reading={reading} />]),
+  );
 
   return (
     <div className="min-h-screen">
@@ -34,7 +44,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           </p>
         </header>
 
-        <ReadingBoard readings={readings} activeCategory={category} />
+        <ReadingBoard readings={readings} activeCategory={category} tweetCards={tweetCards} />
 
         <footer className="mt-16 border-t border-[var(--border)] pt-8 text-center text-sm text-[var(--text-muted)]">
           Submissions: dhruvpareek883@gmail.com
