@@ -1,6 +1,5 @@
 import "server-only";
 
-import { Suspense } from "react";
 import { unstable_cache } from "next/cache";
 import Image from "next/image";
 import { EmbeddedTweet, type TwitterComponents } from "react-tweet";
@@ -35,9 +34,7 @@ export function TweetCard({ reading }: { reading: Reading }) {
   return (
     <div className="tweet-card mx-auto max-w-lg py-2">
       {tweetId ? (
-        <Suspense fallback={fallback}>
-          <CachedTweet id={tweetId} fallback={fallback} />
-        </Suspense>
+        <CachedTweet id={tweetId} fallback={fallback} />
       ) : fallback}
     </div>
   );

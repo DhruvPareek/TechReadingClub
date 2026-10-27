@@ -11,6 +11,11 @@ type CategoryPageProps = {
 };
 
 export const dynamicParams = true;
+export const revalidate = 300;
+
+export function generateStaticParams() {
+  return [{ category: "tweets" }];
+}
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category: categorySlug } = await params;
