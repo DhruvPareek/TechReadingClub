@@ -137,7 +137,7 @@ export function ReadingBoard({ readings, activeCategory, tweetCards }: ReadingBo
       )}
 
       {/* Reading List */}
-      <div className={activeCategory === "Tweets" ? "mt-6 space-y-2" : "mt-6 space-y-1"}>
+      <div className={activeCategory === "Tweets" ? "mt-4 space-y-3" : "mt-6 space-y-1"}>
         {sortedReadings.map((reading) => (
           <Fragment key={reading.id}>
             {tweetCards[reading.id] ?? <StandardReadingCard reading={reading} />}

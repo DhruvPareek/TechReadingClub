@@ -37,8 +37,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <div className="min-h-screen">
-      <main className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
-        <header className="mb-12 text-center">
+      <main className={`mx-auto max-w-3xl px-4 sm:px-6 ${category === "Tweets" ? "py-8" : "py-12 sm:py-16"}`}>
+        <header className={`${category === "Tweets" ? "mb-6" : "mb-12"} text-center`}>
           <h1 className="font-display text-3xl font-medium tracking-tight text-[var(--text)] sm:text-4xl">
             The Technology Reading Club
           </h1>

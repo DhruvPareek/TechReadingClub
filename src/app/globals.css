@@ -78,6 +78,159 @@ a {
 }
 
 /* Tweet cards */
+.tweet-disclosure {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-card);
+  overflow: hidden;
+}
+
+.tweet-summary {
+  display: block;
+  padding: 12px 14px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.tweet-summary::-webkit-details-marker {
+  display: none;
+}
+
+.tweet-summary:hover {
+  background: var(--bg-hover);
+}
+
+.tweet-summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -3px;
+}
+
+.tweet-preview-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.tweet-preview-avatar {
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.tweet-preview-author {
+  min-width: 0;
+  flex: 1;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.tweet-preview-author strong,
+.tweet-preview-author span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tweet-preview-author strong {
+  font-size: 13px;
+}
+
+.tweet-preview-author span,
+.tweet-preview-header time,
+.tweet-preview-quote {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.tweet-preview-header time {
+  flex-shrink: 0;
+}
+
+.tweet-preview-content {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.tweet-preview-text {
+  flex: 1;
+  min-width: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: pre-line;
+}
+
+.tweet-preview-link {
+  color: #1d9bf0;
+}
+
+.tweet-preview-media {
+  position: relative;
+  flex: 0 0 112px;
+  height: 80px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.tweet-preview-media img {
+  object-fit: contain;
+}
+
+.tweet-preview-video {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  padding: 1px 4px;
+  background: #000b;
+  color: white;
+  border-radius: 3px;
+  font-size: 10px;
+}
+
+.tweet-preview-quote {
+  margin-top: 6px;
+}
+
+.tweet-expand-label,
+.tweet-collapse-label {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--text-muted);
+}
+
+.tweet-collapse-label,
+.tweet-disclosure[open] .tweet-preview,
+.tweet-disclosure[open] .tweet-expand-label {
+  display: none;
+}
+
+.tweet-disclosure[open] .tweet-collapse-label {
+  display: flex;
+  margin-top: 0;
+}
+
+.tweet-disclosure > .react-tweet-theme {
+  max-width: none;
+  border: 0;
+  border-radius: 0;
+}
+
+@media (max-width: 480px) {
+  .tweet-preview-media {
+    flex-basis: 80px;
+  }
+}
+
 .tweet-card .react-tweet-theme {
   --tweet-container-margin: 0;
   --tweet-body-font-size: 1rem;
