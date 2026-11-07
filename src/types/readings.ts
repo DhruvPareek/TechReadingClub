@@ -18,9 +18,9 @@ export type Reading = {
   author: string;
   type: ReadingType;
   link: string;
-  rating: 0 | 1 | 2 | 3 | 4 | 5;
   summary?: string;
   reviewDate: string;
+  publishedDate?: string;
   categories: Category[];
   tweetEmbedHtml?: string;
 };

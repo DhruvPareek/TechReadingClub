@@ -3,6 +3,7 @@
 import "server-only";
 
 import { cache } from "react";
+import publicationDates from "@/data/publication-dates.json";
 import {
   CATEGORY_ORDER,
   type Category,
@@ -14,6 +15,13 @@ import {
 const SHEETS_API_BASE = "https://sheets.googleapis.com/v4/spreadsheets";
 const REVALIDATE_SECONDS = 60 * 5; // 5 minutes
 const CATEGORY_FALLBACK: Category = "Misc.";
+// One ID is shared by two different readings in the sheet; include the title.
+const PUBLICATION_DATE_BY_READING = new Map(
+  publicationDates.map(({ id, title, publishedDate }) => [
+    JSON.stringify([id.trim(), title.trim()]),
+    publishedDate,
+  ]),
+);
 
 const NORMALIZED_HEADER = {
   id: normalizeKey("id"),
@@ -21,9 +29,9 @@ const NORMALIZED_HEADER = {
   author: normalizeKey("author"),
   type: normalizeKey("type"),
   link: normalizeKey("link"),
-  rating: normalizeKey("rating"),
   summary: normalizeKey("summary"),
   reviewDate: normalizeKey("reviewDate"),
+  publishedDate: normalizeKey("publishedDate"),
   categories: normalizeKey("categories"),
   tweetEmbedHtml: normalizeKey("tweetEmbedHtml"),
 } as const;
@@ -63,14 +71,6 @@ function parseReadingType(value: string): ReadingType {
   return "Book";
 }
 
-function parseRating(value: string): Reading["rating"] {
-  const rating = Number(value);
-  if (Number.isFinite(rating) && rating >= 0 && rating <= 5) {
-    return Math.round(rating) as Reading["rating"];
-  }
-  return 0;
-}
-
 function parseCategories(value: string): Category[] {
   const cleaned = value
     .split(/[\|,]/)
@@ -103,14 +103,16 @@ function mapRowToReading(row: string[], headerMap: HeaderMap): Reading | null {
       extractValue(row, headerMap, NORMALIZED_HEADER.type).trim(),
     ),
     link: extractValue(row, headerMap, NORMALIZED_HEADER.link).trim(),
-    rating: parseRating(
-      extractValue(row, headerMap, NORMALIZED_HEADER.rating).trim(),
-    ),
     summary: (() => {
       const value = extractValue(row, headerMap, NORMALIZED_HEADER.summary).trim();
       return value ? value : undefined;
     })(),
     reviewDate: extractValue(row, headerMap, NORMALIZED_HEADER.reviewDate).trim(),
+    publishedDate:
+      extractValue(row, headerMap, NORMALIZED_HEADER.publishedDate).trim() ||
+      extractValue(row, headerMap, normalizeKey("Publish Date")).trim() ||
+      PUBLICATION_DATE_BY_READING.get(JSON.stringify([id, title])) ||
+      undefined,
     categories,
     tweetEmbedHtml: (() => {
       const value = extractValue(
@@ -134,7 +136,7 @@ function getRequiredEnv(name: string) {
 async function requestSheetValues() {
   const apiKey = getRequiredEnv("GOOGLE_SHEETS_API_KEY");
   const spreadsheetId = getRequiredEnv("GOOGLE_SHEETS_SPREADSHEET_ID");
-  const range = process.env.GOOGLE_SHEETS_RANGE ?? "readings!A1:J";
+  const range = process.env.GOOGLE_SHEETS_RANGE ?? "readings!A1:I";
 
   const url = `${SHEETS_API_BASE}/${spreadsheetId}/values/${encodeURIComponent(
     range,

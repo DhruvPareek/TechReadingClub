@@ -8,10 +8,9 @@
   --text: #1a1a1a;
   --text-secondary: #4a4a4a;
   --text-muted: #8b7355;
+  --text-date: #6f6a63;
   --accent: #8b7355;
   --border: #d4cfc4;
-  --star-filled: #d4a853;
-  --star-empty: #c9c4b9;
 }
 
 .dark {
@@ -22,10 +21,9 @@
   --text: #f5ecda;
   --text-secondary: #c7b38b;
   --text-muted: #9a8b70;
+  --text-date: #aaa79f;
   --accent: #cdbc9f;
   --border: #1b2842;
-  --star-filled: #f7c873;
-  --star-empty: #5c6479;
 }
 
 @theme inline {

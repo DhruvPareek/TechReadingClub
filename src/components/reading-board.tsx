@@ -1,7 +1,8 @@
 "use client";
 
-import { Fragment, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
+import { formatPublicationDate, publicationDateTimestamp } from "@/lib/publication-date";
 import {
   CATEGORY_DESCRIPTORS,
   categoryToSlug,
@@ -15,26 +16,32 @@ type ReadingBoardProps = {
   tweetCards: Record<string, ReactNode>;
 };
 
-const STARS = [1, 2, 3, 4, 5] as const;
-type SortMode = "date" | "rating";
-const SORT_MODE_STORAGE_KEY = "reading-board-sort-mode";
 const CATEGORY_NAV_SCROLL_KEY = "reading-board-category-nav-scroll";
+const PUBLISH_SORT_STORAGE_KEY = "reading-board-publish-sort";
+type PublishSortOrder = "newest" | "oldest";
 
 export function ReadingBoard({ readings, activeCategory, tweetCards }: ReadingBoardProps) {
-  const [sortMode, setSortMode] = useState<SortMode>(() => readStoredSortMode());
+  const [publishSortOrder, setPublishSortOrder] = useState<PublishSortOrder>("newest");
   const categoryNavRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    persistSortMode(sortMode);
-  }, [sortMode]);
-
-  // Restore scroll position on mount
+  // Restore saved sorting after hydration so the initial client order matches the server.
   useEffect(() => {
     const savedScrollLeft = sessionStorage.getItem(CATEGORY_NAV_SCROLL_KEY);
     if (savedScrollLeft !== null && categoryNavRef.current) {
       categoryNavRef.current.scrollLeft = Number(savedScrollLeft);
     }
+    const savedSort = sessionStorage.getItem(PUBLISH_SORT_STORAGE_KEY);
+    if (savedSort === "newest" || savedSort === "oldest") {
+      const frame = requestAnimationFrame(() => setPublishSortOrder(savedSort));
+      return () => cancelAnimationFrame(frame);
+    }
   }, []);
+
+  const togglePublishSort = () => {
+    const nextOrder = publishSortOrder === "newest" ? "oldest" : "newest";
+    setPublishSortOrder(nextOrder);
+    sessionStorage.setItem(PUBLISH_SORT_STORAGE_KEY, nextOrder);
+  };
 
   const handleCategoryChange = (category: Category) => {
     if (category === activeCategory) return;
@@ -44,31 +51,20 @@ export function ReadingBoard({ readings, activeCategory, tweetCards }: ReadingBo
     }
   };
 
-  const filteredReadings = useMemo(
-    () => readings.filter((reading) => reading.categories.includes(activeCategory)),
-    [readings, activeCategory],
+  const sortedReadings = readings.filter((reading) =>
+    reading.categories.includes(activeCategory),
   );
-
-  const sortedReadings = useMemo(() => {
-    const items = [...filteredReadings];
-    if (activeCategory === "Tweets") {
-      return items.reverse();
-    }
-    if (sortMode === "rating") {
-      return items.sort((a, b) => {
-        if (b.rating === a.rating) {
-          return (
-            new Date(b.reviewDate).getTime() - new Date(a.reviewDate).getTime()
-          );
-        }
-        return b.rating - a.rating;
-      });
-    }
-    return items.sort(
-      (a, b) =>
-        new Date(b.reviewDate).getTime() - new Date(a.reviewDate).getTime(),
-    );
-  }, [filteredReadings, sortMode, activeCategory]);
+  if (activeCategory === "Tweets") {
+    sortedReadings.reverse();
+  } else {
+    sortedReadings.sort((a, b) => {
+      const aDate = publicationDateTimestamp(a.publishedDate);
+      const bDate = publicationDateTimestamp(b.publishedDate);
+      if (Number.isNaN(aDate)) return Number.isNaN(bDate) ? 0 : 1;
+      if (Number.isNaN(bDate)) return -1;
+      return publishSortOrder === "newest" ? bDate - aDate : aDate - bDate;
+    });
+  }
 
   return (
     <section>
@@ -106,40 +102,25 @@ export function ReadingBoard({ readings, activeCategory, tweetCards }: ReadingBo
         })}
       </nav>
 
-      {/* Sort Controls */}
       {activeCategory !== "Tweets" && (
-        <div className="mt-4 flex items-center justify-end gap-2 text-sm">
-          <span className="text-[var(--text-muted)]">Sort:</span>
+        <div className="mt-4 px-3 text-right">
           <button
             type="button"
-            onClick={() => setSortMode("date")}
-            className={`px-2 py-1 transition-colors ${
-              sortMode === "date"
-                ? "text-[var(--text)]"
-                : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
-            }`}
+            onClick={togglePublishSort}
+            aria-label={`Publish Date, ${publishSortOrder} first. Sort ${publishSortOrder === "newest" ? "oldest" : "newest"} first`}
+            title={`Sort ${publishSortOrder === "newest" ? "oldest" : "newest"} first`}
+            className="inline-flex cursor-pointer items-center gap-1.5 rounded-sm py-1 text-xs font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--text)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--text-secondary)]"
           >
-            Date
-          </button>
-          <span className="text-[var(--border)]">·</span>
-          <button
-            type="button"
-            onClick={() => setSortMode("rating")}
-            className={`px-2 py-1 transition-colors ${
-              sortMode === "rating"
-                ? "text-[var(--text)]"
-                : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
-            }`}
-          >
-            Rating
+            Publish Date
+            <span aria-hidden="true">{publishSortOrder === "newest" ? "↓" : "↑"}</span>
           </button>
         </div>
       )}
 
       {/* Reading List */}
-      <div className={activeCategory === "Tweets" ? "mt-4 space-y-3" : "mt-6 space-y-1"}>
+      <div className={activeCategory === "Tweets" ? "mt-4 space-y-3" : "mt-2 space-y-1"}>
         {sortedReadings.map((reading) => (
-          <Fragment key={reading.id}>
+          <Fragment key={JSON.stringify([reading.id, reading.title])}>
             {tweetCards[reading.id] ?? <StandardReadingCard reading={reading} />}
           </Fragment>
         ))}
@@ -165,10 +146,12 @@ function StandardReadingCard({ reading }: ReadingCardProps) {
           >
             {reading.title}
           </a>
-          <div className="mt-1 flex items-center gap-2 text-sm text-[var(--text-muted)]">
-            <span>{reading.author}</span>
-            <span>·</span>
-            <span>{reading.type}</span>
+          <div className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-sm text-[var(--text-muted)]">
+            {reading.author && <span>{reading.author}</span>}
+            <span className="whitespace-nowrap">
+              {reading.author && <span className="mr-2">·</span>}
+              {reading.type}
+            </span>
           </div>
           {reading.summary && (
             <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
@@ -176,44 +159,14 @@ function StandardReadingCard({ reading }: ReadingCardProps) {
             </p>
           )}
         </div>
-        <div className="flex flex-col items-end gap-1 pt-0.5">
-          <Rating rating={reading.rating} />
-          <span className="text-xs text-[var(--text-muted)]">
-            {formatReviewDate(reading.reviewDate)}
+        <div className="shrink-0 pt-0.5 text-right">
+          <span className="whitespace-nowrap text-sm tabular-nums text-[var(--text-date)]">
+            {formatPublicationDate(reading.publishedDate)}
           </span>
         </div>
       </div>
     </article>
   );
-}
-
-function Rating({ rating }: { rating: number }) {
-  return (
-    <div className="flex items-center gap-0.5" aria-label={`${rating} out of 5 stars`}>
-      {STARS.map((value) => (
-        <StarIcon key={value} filled={value <= rating} />
-      ))}
-    </div>
-  );
-}
-
-function StarIcon({ filled }: { filled: boolean }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 20 20"
-      className={`h-3.5 w-3.5 ${filled ? "text-[var(--star-filled)]" : "text-[var(--star-empty)]"}`}
-      fill="currentColor"
-    >
-      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-    </svg>
-  );
-}
-
-function formatReviewDate(dateString: string) {
-  const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) return dateString;
-  return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
 }
 
 function FeaturedSparkle() {
@@ -227,15 +180,4 @@ function FeaturedSparkle() {
       <path d="M9.048 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
     </svg>
   );
-}
-
-function readStoredSortMode(): SortMode {
-  if (typeof window === "undefined") return "date";
-  const stored = window.sessionStorage.getItem(SORT_MODE_STORAGE_KEY);
-  return stored === "rating" ? "rating" : "date";
-}
-
-function persistSortMode(mode: SortMode) {
-  if (typeof window === "undefined") return;
-  window.sessionStorage.setItem(SORT_MODE_STORAGE_KEY, mode);
 }
