@@ -17,11 +17,11 @@ type ReadingBoardProps = {
 };
 
 const CATEGORY_NAV_SCROLL_KEY = "reading-board-category-nav-scroll";
-const PUBLISH_SORT_STORAGE_KEY = "reading-board-publish-sort";
-type PublishSortOrder = "newest" | "oldest";
+const SORT_STORAGE_KEY = "reading-board-sort";
+type SortOrder = "added" | "newest" | "oldest";
 
 export function ReadingBoard({ readings, activeCategory, tweetCards }: ReadingBoardProps) {
-  const [publishSortOrder, setPublishSortOrder] = useState<PublishSortOrder>("newest");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
   const categoryNavRef = useRef<HTMLDivElement | null>(null);
 
   // Restore saved sorting after hydration so the initial client order matches the server.
@@ -30,17 +30,18 @@ export function ReadingBoard({ readings, activeCategory, tweetCards }: ReadingBo
     if (savedScrollLeft !== null && categoryNavRef.current) {
       categoryNavRef.current.scrollLeft = Number(savedScrollLeft);
     }
-    const savedSort = sessionStorage.getItem(PUBLISH_SORT_STORAGE_KEY);
-    if (savedSort === "newest" || savedSort === "oldest") {
-      const frame = requestAnimationFrame(() => setPublishSortOrder(savedSort));
+    const savedSort =
+      sessionStorage.getItem(SORT_STORAGE_KEY) ??
+      sessionStorage.getItem("reading-board-publish-sort");
+    if (savedSort === "added" || savedSort === "newest" || savedSort === "oldest") {
+      const frame = requestAnimationFrame(() => setSortOrder(savedSort));
       return () => cancelAnimationFrame(frame);
     }
   }, []);
 
-  const togglePublishSort = () => {
-    const nextOrder = publishSortOrder === "newest" ? "oldest" : "newest";
-    setPublishSortOrder(nextOrder);
-    sessionStorage.setItem(PUBLISH_SORT_STORAGE_KEY, nextOrder);
+  const handleSortChange = (nextOrder: SortOrder) => {
+    setSortOrder(nextOrder);
+    sessionStorage.setItem(SORT_STORAGE_KEY, nextOrder);
   };
 
   const handleCategoryChange = (category: Category) => {
@@ -51,10 +52,11 @@ export function ReadingBoard({ readings, activeCategory, tweetCards }: ReadingBo
     }
   };
 
+  // Readings arrive in spreadsheet order, with newer additions at the bottom.
   const sortedReadings = readings.filter((reading) =>
     reading.categories.includes(activeCategory),
   );
-  if (activeCategory === "Tweets") {
+  if (activeCategory === "Tweets" || sortOrder === "added") {
     sortedReadings.reverse();
   } else {
     sortedReadings.sort((a, b) => {
@@ -62,7 +64,7 @@ export function ReadingBoard({ readings, activeCategory, tweetCards }: ReadingBo
       const bDate = publicationDateTimestamp(b.publishedDate);
       if (Number.isNaN(aDate)) return Number.isNaN(bDate) ? 0 : 1;
       if (Number.isNaN(bDate)) return -1;
-      return publishSortOrder === "newest" ? bDate - aDate : aDate - bDate;
+      return sortOrder === "newest" ? bDate - aDate : aDate - bDate;
     });
   }
 
@@ -103,16 +105,41 @@ export function ReadingBoard({ readings, activeCategory, tweetCards }: ReadingBo
       </nav>
 
       {activeCategory !== "Tweets" && (
-        <div className="mt-4 px-3 text-right">
+        <div
+          role="group"
+          aria-label="Sort readings"
+          className="mt-3 flex items-center justify-end gap-4 px-3 text-xs"
+        >
+          <span className="text-[var(--text-muted)]">
+            Sort by
+          </span>
           <button
             type="button"
-            onClick={togglePublishSort}
-            aria-label={`Publish Date, ${publishSortOrder} first. Sort ${publishSortOrder === "newest" ? "oldest" : "newest"} first`}
-            title={`Sort ${publishSortOrder === "newest" ? "oldest" : "newest"} first`}
-            className="inline-flex cursor-pointer items-center gap-1.5 rounded-sm py-1 text-xs font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--text)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--text-secondary)]"
+            aria-pressed={sortOrder === "added"}
+            title="Most recently added first"
+            onClick={() => handleSortChange("added")}
+            className={`min-h-11 cursor-pointer rounded-sm py-2 font-medium decoration-[var(--text-muted)] underline-offset-[6px] transition-colors hover:text-[var(--text)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--text-secondary)] sm:min-h-9 ${
+              sortOrder === "added"
+                ? "text-[var(--text)] underline"
+                : "text-[var(--text-muted)]"
+            }`}
           >
-            Publish Date
-            <span aria-hidden="true">{publishSortOrder === "newest" ? "↓" : "↑"}</span>
+            Order added
+          </button>
+          <button
+            type="button"
+            aria-pressed={sortOrder !== "added"}
+            aria-label={`Publish date${sortOrder === "added" ? "" : `, ${sortOrder} first`}. Sort ${sortOrder === "newest" ? "oldest" : "newest"} first`}
+            title={`Sort ${sortOrder === "newest" ? "oldest" : "newest"} first`}
+            onClick={() => handleSortChange(sortOrder === "newest" ? "oldest" : "newest")}
+            className={`inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-sm py-2 font-medium decoration-[var(--text-muted)] underline-offset-[6px] transition-colors hover:text-[var(--text)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--text-secondary)] sm:min-h-9 ${
+              sortOrder !== "added"
+                ? "text-[var(--text)] underline"
+                : "text-[var(--text-muted)]"
+            }`}
+          >
+            Publish date
+            <span aria-hidden="true">{sortOrder === "oldest" ? "↑" : "↓"}</span>
           </button>
         </div>
       )}
