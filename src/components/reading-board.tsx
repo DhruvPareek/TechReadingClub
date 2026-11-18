@@ -17,32 +17,18 @@ type ReadingBoardProps = {
 };
 
 const CATEGORY_NAV_SCROLL_KEY = "reading-board-category-nav-scroll";
-const SORT_STORAGE_KEY = "reading-board-sort";
 type SortOrder = "added" | "newest" | "oldest";
 
 export function ReadingBoard({ readings, activeCategory, tweetCards }: ReadingBoardProps) {
-  const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("added");
   const categoryNavRef = useRef<HTMLDivElement | null>(null);
 
-  // Restore saved sorting after hydration so the initial client order matches the server.
   useEffect(() => {
     const savedScrollLeft = sessionStorage.getItem(CATEGORY_NAV_SCROLL_KEY);
     if (savedScrollLeft !== null && categoryNavRef.current) {
       categoryNavRef.current.scrollLeft = Number(savedScrollLeft);
     }
-    const savedSort =
-      sessionStorage.getItem(SORT_STORAGE_KEY) ??
-      sessionStorage.getItem("reading-board-publish-sort");
-    if (savedSort === "added" || savedSort === "newest" || savedSort === "oldest") {
-      const frame = requestAnimationFrame(() => setSortOrder(savedSort));
-      return () => cancelAnimationFrame(frame);
-    }
   }, []);
-
-  const handleSortChange = (nextOrder: SortOrder) => {
-    setSortOrder(nextOrder);
-    sessionStorage.setItem(SORT_STORAGE_KEY, nextOrder);
-  };
 
   const handleCategoryChange = (category: Category) => {
     if (category === activeCategory) return;
@@ -117,7 +103,7 @@ export function ReadingBoard({ readings, activeCategory, tweetCards }: ReadingBo
             type="button"
             aria-pressed={sortOrder === "added"}
             title="Most recently added first"
-            onClick={() => handleSortChange("added")}
+            onClick={() => setSortOrder("added")}
             className={`min-h-11 cursor-pointer rounded-sm py-2 font-medium decoration-[var(--text-muted)] underline-offset-[6px] transition-colors hover:text-[var(--text)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--text-secondary)] sm:min-h-9 ${
               sortOrder === "added"
                 ? "text-[var(--text)] underline"
@@ -131,7 +117,7 @@ export function ReadingBoard({ readings, activeCategory, tweetCards }: ReadingBo
             aria-pressed={sortOrder !== "added"}
             aria-label={`Publish date${sortOrder === "added" ? "" : `, ${sortOrder} first`}. Sort ${sortOrder === "newest" ? "oldest" : "newest"} first`}
             title={`Sort ${sortOrder === "newest" ? "oldest" : "newest"} first`}
-            onClick={() => handleSortChange(sortOrder === "newest" ? "oldest" : "newest")}
+            onClick={() => setSortOrder(sortOrder === "newest" ? "oldest" : "newest")}
             className={`inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-sm py-2 font-medium decoration-[var(--text-muted)] underline-offset-[6px] transition-colors hover:text-[var(--text)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--text-secondary)] sm:min-h-9 ${
               sortOrder !== "added"
                 ? "text-[var(--text)] underline"

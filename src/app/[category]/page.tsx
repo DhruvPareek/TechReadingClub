@@ -49,7 +49,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           </p>
         </header>
 
-        <ReadingBoard readings={readings} activeCategory={category} tweetCards={tweetCards} />
+        <ReadingBoard key={category} readings={readings} activeCategory={category} tweetCards={tweetCards} />
 
         <footer className="mt-16 border-t border-[var(--border)] pt-8 text-center text-sm text-[var(--text-muted)]">
           Submissions: dhruvpareek883@gmail.com

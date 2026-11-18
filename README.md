@@ -19,14 +19,15 @@ To seed a blank spreadsheet, import
 The default sheet name is usually `Sheet1`; update `GOOGLE_SHEETS_RANGE` to match
 your tab name (`readings` for the live sheet).
 
-Readings default to newest publication date first. The inline **Sort by** controls
+Readings default to **Order added** when opening or reloading the site and when
+opening a category tab. The inline **Sort by** controls
 offer **Order added** and **Publish date**, with the active choice underlined.
 Click **Publish date** again to toggle newest/oldest first; the arrow shows the
 current direction.
 **Order added** follows the spreadsheet rows from bottom to top within the current
 category; it does not require an added-date column. Reordering spreadsheet rows
-also changes this order. The selection persists across categories and reloads
-within the browser session.
+also changes this order. A manual sort selection applies only to the current
+view; opening another category or reloading resets it to **Order added**.
 Tweets retain their existing order. The `rating` column remains in the spreadsheet
 but is no longer displayed or used for sorting.
 
