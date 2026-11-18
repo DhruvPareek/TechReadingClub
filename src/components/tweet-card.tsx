@@ -2,7 +2,7 @@ import "server-only";
 
 import { unstable_cache } from "next/cache";
 import Image from "next/image";
-import { EmbeddedTweet, type TwitterComponents } from "react-tweet";
+import { EmbeddedTweet, TweetContainer, type TwitterComponents } from "react-tweet";
 import { getTweet } from "react-tweet/api";
 import type { Reading } from "@/types/readings";
 
@@ -69,15 +69,17 @@ function TweetFallback({ reading, tweetId }: { reading: Reading; tweetId?: strin
   const url = tweetId ? `https://x.com/i/status/${tweetId}` : reading.link;
 
   return (
-    <article className="tweet-fallback">
+    <TweetContainer className="tweet-fallback">
       {html ? (
         <div dangerouslySetInnerHTML={{ __html: html }} />
       ) : (
-        <>
-          <p>{reading.summary || reading.title || "Tweet unavailable."}</p>
-          {url && <a href={url} target="_blank" rel="noreferrer">View on X</a>}
-        </>
+        <p>{reading.summary || reading.title || "Tweet unavailable."}</p>
       )}
-    </article>
+      {url && (
+        <a className="tweet-fallback-link" href={url} target="_blank" rel="noreferrer">
+          View on X
+        </a>
+      )}
+    </TweetContainer>
   );
 }

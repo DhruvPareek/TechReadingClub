@@ -98,26 +98,39 @@ a {
 }
 
 .tweet-fallback {
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1rem;
-  background: var(--bg-card);
-  color: var(--text);
-  font-size: 0.9375rem;
-  line-height: 1.5;
+  font-size: var(--tweet-info-font-size);
+  line-height: var(--tweet-info-line-height);
   overflow-wrap: anywhere;
 }
 
 .tweet-fallback blockquote {
   margin: 0;
+  color: var(--tweet-font-color-secondary);
 }
 
 .tweet-fallback p {
   margin: 0 0 0.75rem;
+  color: var(--tweet-font-color);
+  font-size: var(--tweet-body-font-size);
+  font-weight: var(--tweet-body-font-weight);
+  line-height: var(--tweet-body-line-height);
+  white-space: pre-wrap;
 }
 
 .tweet-fallback a {
-  color: #1d9bf0;
+  color: var(--tweet-color-blue-secondary);
+}
+
+.tweet-fallback a:hover {
+  text-decoration: underline;
+}
+
+.tweet-fallback-link {
+  display: block;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: var(--tweet-border);
+  font-weight: 700;
 }
 
 /* Theme toggle */
